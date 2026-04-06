@@ -3,7 +3,7 @@ const pokemonApiUrl = 'https://pokeapi.co/api/v2/pokemon?limit=20';
 /**
  * Loads the pokemon list from the API.
  *
- * @returns {Promise<Array>} The loaded pokemon list.
+ * @returns {Promise<Array>} 
  */
 async function loadPokemonList() {
   try {
@@ -12,7 +12,34 @@ async function loadPokemonList() {
 
     return data.results;
   } catch (error) {
-    console.error('Failed to load pokemon list:', error);
+    handleFetchError(error);
     return [];
   }
+}
+
+/**
+ * Loads the details of one pokemon.
+ *
+ * @param {string} pokemonUrl 
+ * @returns {Promise<Object | null>} 
+ */
+async function loadPokemonDetails(pokemonUrl) {
+  try {
+    const response = await fetch(pokemonUrl);
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    handleFetchError(error);
+    return null;
+  }
+}
+
+/**
+ * Handles API fetch errors.
+ *
+ * @param {Error} error 
+ */
+function handleFetchError(error) {
+  console.error('Failed to load pokemon data:', error);
 }
