@@ -45,7 +45,11 @@ function getPokemonTypesTemplate(pokemonTypes) {
 function getPokemonTypeBadgeTemplate(typeName) {
   const formattedTypeName = capitalizeFirstLetter(typeName);
 
-  return `<span class="pokemonTypeBadge">${formattedTypeName}</span>`;
+  return `
+    <span class="pokemonTypeBadge type-${typeName}">
+      ${formattedTypeName}
+    </span>
+  `;
 }
 
 /**
