@@ -64,5 +64,14 @@ body {
    ========================= */
 
 .pokemonList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
   min-height: 200px;
+}
+
+.pokemonListItem {
+  padding: var(--spacing-medium);
+  background-color: var(--color-white);
+  border-radius: 12px;
 }

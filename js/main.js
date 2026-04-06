@@ -1,8 +1,9 @@
 /**
  * Starts the application.
  */
-function initializeApp() {
-  loadPokemonList();
+async function initializeApp() {
+  const pokemonList = await loadPokemonList();
+  renderPokemonList(pokemonList);
 }
 
 initializeApp();
