@@ -10,7 +10,7 @@ function renderPokemonList(pokemonList) {
     return;
   }
 
-  pokemonListContainer.innerHTML = '';
+  clearPokemonList();
   renderPokemonListItems(pokemonList, pokemonListContainer);
 }
 
@@ -22,7 +22,7 @@ function renderPokemonList(pokemonList) {
  */
 function renderPokemonListItems(pokemonList, pokemonListContainer) {
   pokemonList.forEach((pokemon) => {
-    pokemonListContainer.innerHTML += getPokemonListItemTemplate(pokemon);
+    pokemonListContainer.innerHTML += getPokemonCardTemplate(pokemon);
   });
 }
 
