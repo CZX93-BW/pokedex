@@ -35,7 +35,7 @@ Projekt organisatorisch und technisch vorbereiten, damit die Umsetzung an den Fo
 
 ---
 
-## Tag 1 – Grundgerüst, erste Implementierung und Basis-Styling
+## Tag 1 – Grundgerüst, erste Implementierung und Basis-Styling (aktuell)
 
 ### Ziel
 Technisches Fundament schaffen und erste sichtbare Bestandteile der Anwendung umsetzen.
