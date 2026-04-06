@@ -8,14 +8,19 @@
   --color-background: #f4f4f4;
   --color-text: #222222;
   --color-white: #ffffff;
+  --color-border: #dddddd;
+  --color-surface: #fafafa;
+  --color-shadow: rgba(0, 0, 0, 0.08);
 
   /* Spacing */
   --spacing-small: 8px;
   --spacing-medium: 16px;
   --spacing-large: 24px;
+  --spacing-extra-large: 32px;
 
   /* Layout */
   --max-width: 1440px;
+  --border-radius-medium: 16px;
 
   /* Typography */
   --font-family-base: Arial, sans-serif;
@@ -59,19 +64,82 @@ body {
   padding: var(--spacing-large) 0;
 }
 
+.pokemonSection {
+  width: 100%;
+}
+
 /* =========================
    Pokemon List
    ========================= */
 
 .pokemonList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-medium);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--spacing-large);
   min-height: 200px;
 }
 
-.pokemonListItem {
-  padding: var(--spacing-medium);
+/* =========================
+   Pokemon Card
+   ========================= */
+
+.pokemonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  padding: var(--spacing-large);
   background-color: var(--color-white);
-  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.pokemonCardId {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.pokemonCardTitle {
+  margin: 0;
+  font-size: 24px;
+}
+
+.pokemonCardImagePlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  padding: var(--spacing-medium);
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius-medium);
+  font-size: 14px;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 768px) {
+  .pageHeader {
+    padding: var(--spacing-medium) 0;
+  }
+
+  .pageMain {
+    padding: var(--spacing-medium) 0;
+  }
+
+  .pokemonList {
+    gap: var(--spacing-medium);
+  }
+
+  .pokemonCard {
+    padding: var(--spacing-medium);
+  }
+
+  .pokemonCardTitle {
+    font-size: 20px;
+  }
 }

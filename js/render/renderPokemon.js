@@ -27,16 +27,6 @@ function renderPokemonListItems(pokemonList, pokemonListContainer) {
 }
 
 /**
- * Creates the HTML template for one pokemon list item.
- *
- * @param {Object} pokemon 
- * @returns {string} 
- */
-function getPokemonListItemTemplate(pokemon) {
-  return `<div class="pokemonListItem">${pokemon.name}</div>`;
-}
-
-/**
  * Renders one pokemon card.
  *
  * @param {Object} pokemon 
