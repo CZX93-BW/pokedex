@@ -1,0 +1,68 @@
+/* =========================
+   Root Variables
+   ========================= */
+
+:root {
+  /* Colors */
+  --color-primary: #ee1515;
+  --color-background: #f4f4f4;
+  --color-text: #222222;
+  --color-white: #ffffff;
+
+  /* Spacing */
+  --spacing-small: 8px;
+  --spacing-medium: 16px;
+  --spacing-large: 24px;
+
+  /* Layout */
+  --max-width: 1200px;
+
+  /* Typography */
+  --font-family-base: Arial, sans-serif;
+}
+
+/* =========================
+   Base
+   ========================= */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  background-color: var(--color-background);
+  color: var(--color-text);
+}
+
+/* =========================
+   Layout
+   ========================= */
+
+.contentWrapper {
+  width: min(var(--max-width), calc(100% - var(--spacing-large)));
+  margin: 0 auto;
+}
+
+.pageHeader {
+  padding: var(--spacing-large) 0;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+}
+
+.pageHeader h1 {
+  margin: 0;
+}
+
+.pageMain {
+  padding: var(--spacing-large) 0;
+}
+
+/* =========================
+   Pokemon List
+   ========================= */
+
+.pokemonList {
+  min-height: 200px;
+}
