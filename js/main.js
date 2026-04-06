@@ -9,8 +9,12 @@ async function initializeApp() {
  * Loads the pokemon list and renders it.
  */
 async function loadAndRenderPokemonList() {
+  renderLoadingState();
+
   const pokemonList = await loadPokemonList();
-  renderPokemonList(pokemonList);
+  const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
+
+  renderPokemonList(detailedPokemonList);
 }
 
 /**

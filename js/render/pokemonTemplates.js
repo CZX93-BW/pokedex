@@ -5,14 +5,17 @@
  * @returns {string} 
  */
 function getPokemonCardTemplate(pokemon) {
-  const pokemonId = extractPokemonIdFromUrl(pokemon.url);
+  const pokemonId = pokemon.id;
   const pokemonName = capitalizeFirstLetter(pokemon.name);
+  const pokemonImage = pokemon.sprites.front_default;
 
   return `
     <article class="pokemonCard">
       <span class="pokemonCardId">#${pokemonId}</span>
       <h2 class="pokemonCardTitle">${pokemonName}</h2>
-      <div class="pokemonCardImagePlaceholder">Bild folgt</div>
+      <div class="pokemonCardImageWrapper">
+        <img src="${pokemonImage}" alt="${pokemonName}">
+      </div>
     </article>
   `;
 }
