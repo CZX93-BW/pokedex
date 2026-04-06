@@ -10,6 +10,7 @@ function renderPokemonList(pokemonList) {
     return;
   }
 
+  clearPokemonStatus();
   clearPokemonList();
   renderPokemonListItems(pokemonList, pokemonListContainer);
 }
@@ -48,7 +49,14 @@ function renderPokemonDetails(pokemonDetails) {
  * Renders a loading state.
  */
 function renderLoadingState() {
-  console.log('Loading state not implemented yet');
+  const pokemonStatusContainer = getElementById('pokemonStatus');
+
+  if (!pokemonStatusContainer) {
+    return;
+  }
+
+  clearPokemonList();
+  pokemonStatusContainer.innerHTML = getLoadingTemplate();
 }
 
 /**
@@ -57,7 +65,14 @@ function renderLoadingState() {
  * @param {string} message 
  */
 function renderErrorMessage(message) {
-  console.log('Error state not implemented yet:', message);
+  const pokemonStatusContainer = getElementById('pokemonStatus');
+
+  if (!pokemonStatusContainer) {
+    return;
+  }
+
+  clearPokemonList();
+  pokemonStatusContainer.innerHTML = getErrorTemplate(message);
 }
 
 /**
@@ -71,4 +86,17 @@ function clearPokemonList() {
   }
 
   pokemonListContainer.innerHTML = '';
+}
+
+/**
+ * Clears the pokemon status container.
+ */
+function clearPokemonStatus() {
+  const pokemonStatusContainer = getElementById('pokemonStatus');
+
+  if (!pokemonStatusContainer) {
+    return;
+  }
+
+  pokemonStatusContainer.innerHTML = '';
 }

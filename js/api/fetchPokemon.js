@@ -18,6 +18,27 @@ async function loadPokemonList() {
 }
 
 /**
+ * Loads detailed data for multiple pokemon.
+ *
+ * @param {Array} pokemonList 
+ * @returns {Promise<Array>} 
+ */
+async function loadDetailedPokemonList(pokemonList) {
+  try {
+    const detailPromises = pokemonList.map((pokemon) =>
+      loadPokemonDetails(pokemon.url)
+    );
+
+    const detailedPokemonList = await Promise.all(detailPromises);
+
+    return detailedPokemonList.filter((pokemon) => pokemon !== null);
+  } catch (error) {
+    handleFetchError(error);
+    return [];
+  }
+}
+
+/**
  * Loads the details of one pokemon.
  *
  * @param {string} pokemonUrl 
@@ -42,23 +63,4 @@ async function loadPokemonDetails(pokemonUrl) {
  */
 function handleFetchError(error) {
   console.error('Failed to load pokemon data:', error);
-}
-
-/**
- * Loads detailed data for multiple pokemon.
- *
- * @param {Array} pokemonList 
- * @returns {Promise<Array>} 
- */
-async function loadDetailedPokemonList(pokemonList) {
-  try {
-    const detailPromises = pokemonList.map((pokemon) =>
-      loadPokemonDetails(pokemon.url)
-    );
-
-    return await Promise.all(detailPromises);
-  } catch (error) {
-    handleFetchError(error);
-    return [];
-  }
 }

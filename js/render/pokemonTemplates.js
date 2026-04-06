@@ -19,3 +19,31 @@ function getPokemonCardTemplate(pokemon) {
     </article>
   `;
 }
+
+/**
+ * Returns the HTML template for the loading state.
+ *
+ * @returns {string} 
+ */
+function getLoadingTemplate() {
+  return `
+    <div class="statusCard">
+      <div class="loadingSpinner"></div>
+      <p>Lade Pokémon...</p>
+    </div>
+  `;
+}
+
+/**
+ * Returns the HTML template for an error message.
+ *
+ * @param {string} message 
+ * @returns {string} 
+ */
+function getErrorTemplate(message) {
+  return `
+    <div class="statusCard">
+      <p>${message}</p>
+    </div>
+  `;
+}

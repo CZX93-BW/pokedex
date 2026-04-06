@@ -14,6 +14,11 @@ async function loadAndRenderPokemonList() {
   const pokemonList = await loadPokemonList();
   const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
 
+  if (detailedPokemonList.length === 0) {
+    renderErrorMessage('Die Pokémon konnten nicht geladen werden.');
+    return;
+  }
+
   renderPokemonList(detailedPokemonList);
 }
 
