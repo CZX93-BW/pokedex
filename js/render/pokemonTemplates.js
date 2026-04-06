@@ -8,6 +8,7 @@ function getPokemonCardTemplate(pokemon) {
   const pokemonId = pokemon.id;
   const pokemonName = capitalizeFirstLetter(pokemon.name);
   const pokemonImage = pokemon.sprites.front_default;
+  const pokemonTypes = getPokemonTypesTemplate(pokemon.types);
 
   return `
     <article class="pokemonCard">
@@ -16,8 +17,35 @@ function getPokemonCardTemplate(pokemon) {
       <div class="pokemonCardImageWrapper">
         <img src="${pokemonImage}" alt="${pokemonName}">
       </div>
+      <div class="pokemonCardTypes">
+        ${pokemonTypes}
+      </div>
     </article>
   `;
+}
+
+/**
+ * Returns the HTML template for all pokemon types.
+ *
+ * @param {Array} pokemonTypes 
+ * @returns {string} 
+ */
+function getPokemonTypesTemplate(pokemonTypes) {
+  return pokemonTypes
+    .map((typeEntry) => getPokemonTypeBadgeTemplate(typeEntry.type.name))
+    .join('');
+}
+
+/**
+ * Returns the HTML template for one pokemon type badge.
+ *
+ * @param {string} typeName 
+ * @returns {string} 
+ */
+function getPokemonTypeBadgeTemplate(typeName) {
+  const formattedTypeName = capitalizeFirstLetter(typeName);
+
+  return `<span class="pokemonTypeBadge">${formattedTypeName}</span>`;
 }
 
 /**

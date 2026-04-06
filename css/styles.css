@@ -11,6 +11,7 @@
   --color-border: #dddddd;
   --color-surface: #fafafa;
   --color-shadow: rgba(0, 0, 0, 0.08);
+  --color-type-badge: #eeeeee;
 
   /* Spacing */
   --spacing-small: 8px;
@@ -20,6 +21,7 @@
 
   /* Layout */
   --max-width: 1440px;
+  --border-radius-small: 999px;
   --border-radius-medium: 16px;
   --image-size-small: 100px;
 
@@ -157,6 +159,27 @@ body {
 .pokemonCardImageWrapper img {
   max-width: var(--image-size-small);
   height: auto;
+}
+
+/* =========================
+   Pokemon Types
+   ========================= */
+
+.pokemonCardTypes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-small);
+}
+
+.pokemonTypeBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  background-color: var(--color-type-badge);
+  border-radius: var(--border-radius-small);
+  font-size: 14px;
+  font-weight: 700;
 }
 
 /* =========================
