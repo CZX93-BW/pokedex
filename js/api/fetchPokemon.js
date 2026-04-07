@@ -18,6 +18,18 @@ async function loadPokemonList() {
 }
 
 /**
+ * Loads the details of one pokemon by id.
+ *
+ * @param {number} pokemonId 
+ * @returns {Promise<Object | null>} 
+ */
+async function loadPokemonDetailsById(pokemonId) {
+  const pokemonDetailUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonId}`;
+
+  return loadPokemonDetails(pokemonDetailUrl);
+}
+
+/**
  * Loads detailed data for multiple pokemon.
  *
  * @param {Array} pokemonList 

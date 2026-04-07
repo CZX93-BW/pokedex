@@ -2,6 +2,7 @@
  * Starts the application.
  */
 async function initializeApp() {
+  initializeEventListeners();
   await loadAndRenderPokemonList();
 }
 
@@ -27,8 +28,8 @@ async function loadAndRenderPokemonList() {
  *
  * @param {string} pokemonUrl 
  */
-async function openPokemonDetails(pokemonUrl) {
-  const pokemonDetails = await loadPokemonDetails(pokemonUrl);
+async function openPokemonDetails(pokemonId) {
+  const pokemonDetails = await loadPokemonDetailsById(pokemonId);
   renderPokemonDetails(pokemonDetails);
 }
 
@@ -45,7 +46,41 @@ function handlePokemonSearch(searchValue) {
  * Initializes all event listeners.
  */
 function initializeEventListeners() {
-  console.log('Event listeners not implemented yet');
+  initializeDialogOverlayClick();
+  initializeEscapeKeyClose();
+}
+
+/**
+ * Initializes the overlay click event.
+ */
+function initializeDialogOverlayClick() {
+  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+
+  if (!pokemonDialogOverlay) {
+    return;
+  }
+
+  pokemonDialogOverlay.addEventListener('click', closePokemonDetails);
+}
+
+/**
+ * Initializes the escape key event for dialog closing.
+ */
+function initializeEscapeKeyClose() {
+  document.addEventListener('keydown', handleDialogEscapeKey);
+}
+
+/**
+ * Handles the escape key for dialog closing.
+ *
+ * @param {KeyboardEvent} event 
+ */
+function handleDialogEscapeKey(event) {
+  if (event.key !== 'Escape') {
+    return;
+  }
+
+  closePokemonDetails();
 }
 
 initializeApp();

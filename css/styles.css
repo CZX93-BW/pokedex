@@ -13,6 +13,8 @@
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-type-badge: #eeeeee;
   --color-overlay: rgba(0, 0, 0, 0.5);
+  --color-tag-background: #f0f0f0;
+  --color-stat-background: #f7f7f7;
 
   /* Pokemon Type Colors */
   --type-normal: #a8a878;
@@ -253,8 +255,14 @@ body {
   background-color: var(--color-overlay);
 }
 
+.pokemonDialogOverlay.hidden {
+  display: none;
+}
+
 .pokemonDialog {
   width: min(100%, var(--dialog-width));
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .pokemonDialogCard {
@@ -297,6 +305,55 @@ body {
 
 .pokemonDialogInfo p {
   margin: 0;
+}
+
+.pokemonDialogSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+}
+
+.pokemonDialogSectionTitle {
+  margin: 0;
+  font-size: 20px;
+}
+
+.pokemonDialogTagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-small);
+}
+
+.pokemonDialogTag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  background-color: var(--color-tag-background);
+  border-radius: var(--border-radius-small);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pokemonStatsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+}
+
+.pokemonStatItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background-color: var(--color-stat-background);
+  border-radius: var(--border-radius-medium);
+}
+
+.pokemonStatName,
+.pokemonStatValue {
+  font-size: 14px;
+  font-weight: 700;
 }
 
 /* =========================

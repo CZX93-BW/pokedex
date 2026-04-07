@@ -13,7 +13,7 @@ function getPokemonCardTemplate(pokemon) {
   return `
     <article
       class="pokemonCard"
-      onclick="openPokemonDetails('${pokemon.url}')">
+      onclick="openPokemonDetails(${pokemonId})">
       <span class="pokemonCardId">#${pokemonId}</span>
       <h2 class="pokemonCardTitle">${pokemonName}</h2>
       <div class="pokemonCardImageWrapper">

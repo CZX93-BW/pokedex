@@ -121,3 +121,12 @@ function closePokemonDetails() {
 
   pokemonDialogOverlay.classList.add('hidden');
 }
+
+/**
+ * Prevents closing the dialog when clicking inside the dialog card.
+ *
+ * @param {Event} event 
+ */
+function stopDialogClose(event) {
+  event.stopPropagation();
+}
