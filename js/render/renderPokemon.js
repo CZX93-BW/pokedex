@@ -18,7 +18,7 @@ function renderPokemonList(pokemonList) {
 /**
  * Renders all pokemon list items.
  *
- * @param {Array} pokemonList 
+ * @param {Array} pokemonList
  * @param {HTMLElement} pokemonListContainer 
  */
 function renderPokemonListItems(pokemonList, pokemonListContainer) {
@@ -42,7 +42,15 @@ function renderPokemonCard(pokemon) {
  * @param {Object | null} pokemonDetails 
  */
 function renderPokemonDetails(pokemonDetails) {
-  console.log('Details rendering not implemented yet:', pokemonDetails);
+  const pokemonDialog = getElementById('pokemonDialog');
+  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+
+  if (!pokemonDialog || !pokemonDialogOverlay || !pokemonDetails) {
+    return;
+  }
+
+  pokemonDialog.innerHTML = getPokemonDetailTemplate(pokemonDetails);
+  pokemonDialogOverlay.classList.remove('hidden');
 }
 
 /**
@@ -99,4 +107,17 @@ function clearPokemonStatus() {
   }
 
   pokemonStatusContainer.innerHTML = '';
+}
+
+/**
+ * Closes the pokemon detail dialog.
+ */
+function closePokemonDetails() {
+  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+
+  if (!pokemonDialogOverlay) {
+    return;
+  }
+
+  pokemonDialogOverlay.classList.add('hidden');
 }

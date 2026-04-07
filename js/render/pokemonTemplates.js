@@ -11,7 +11,9 @@ function getPokemonCardTemplate(pokemon) {
   const pokemonTypes = getPokemonTypesTemplate(pokemon.types);
 
   return `
-    <article class="pokemonCard">
+    <article
+      class="pokemonCard"
+      onclick="openPokemonDetails('${pokemon.url}')">
       <span class="pokemonCardId">#${pokemonId}</span>
       <h2 class="pokemonCardTitle">${pokemonName}</h2>
       <div class="pokemonCardImageWrapper">
