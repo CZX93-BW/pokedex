@@ -96,6 +96,38 @@ body {
   width: 100%;
 }
 
+.pageHeaderContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-large);
+}
+
+.searchBar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-small);
+}
+
+.searchInput {
+  min-width: 220px;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
+  font: inherit;
+}
+
+.searchButton {
+  padding: 10px 16px;
+  border: none;
+  background-color: var(--color-white);
+  color: var(--color-primary);
+  border-radius: var(--border-radius-medium);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* =========================
    Status
    ========================= */
@@ -434,3 +466,18 @@ body {
     margin-right: 32px;
   }
 }
+
+  .pageHeaderContent {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchBar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .searchInput {
+    min-width: unset;
+    width: 100%;
+  }

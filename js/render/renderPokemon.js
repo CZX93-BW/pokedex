@@ -1,7 +1,7 @@
 /**
  * Renders the pokemon list into the DOM.
  *
- * @param {Array} pokemonList - The pokemon list from the API.
+ * @param {Array} pokemonList 
  */
 function renderPokemonList(pokemonList) {
   const pokemonListContainer = getElementById('pokemonList');
@@ -18,8 +18,8 @@ function renderPokemonList(pokemonList) {
 /**
  * Renders all pokemon list items.
  *
- * @param {Array} pokemonList - The pokemon list from the API.
- * @param {HTMLElement} pokemonListContainer - The list container element.
+ * @param {Array} pokemonList 
+ * @param {HTMLElement} pokemonListContainer 
  */
 function renderPokemonListItems(pokemonList, pokemonListContainer) {
   pokemonList.forEach((pokemon) => {
@@ -30,7 +30,7 @@ function renderPokemonListItems(pokemonList, pokemonListContainer) {
 /**
  * Renders the details of one pokemon.
  *
- * @param {Object | null} pokemonDetails - The loaded pokemon details.
+ * @param {Object | null} pokemonDetails 
  */
 function renderPokemonDetails(pokemonDetails) {
   const pokemonDialog = getElementById('pokemonDialog');
@@ -75,6 +75,20 @@ function renderErrorMessage(message) {
 }
 
 /**
+ * Renders a message for empty search results.
+ */
+function renderNoSearchResults() {
+  const pokemonStatusContainer = getElementById('pokemonStatus');
+
+  if (!pokemonStatusContainer) {
+    return;
+  }
+
+  clearPokemonList();
+  pokemonStatusContainer.innerHTML = getNoSearchResultsTemplate();
+}
+
+/**
  * Renders the loading state inside the dialog.
  */
 function renderDialogLoadingState() {
@@ -92,7 +106,7 @@ function renderDialogLoadingState() {
 /**
  * Renders an error message inside the dialog.
  *
- * @param {string} message - The error message text.
+ * @param {string} message 
  */
 function renderDialogErrorState(message) {
   const pokemonDialog = getElementById('pokemonDialog');
@@ -150,7 +164,7 @@ function closePokemonDetails() {
 /**
  * Prevents closing the dialog when clicking inside the dialog card.
  *
- * @param {Event} event - The click event.
+ * @param {Event} event 
  */
 function stopDialogClose(event) {
   event.stopPropagation();

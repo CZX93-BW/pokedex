@@ -81,3 +81,16 @@ function getErrorTemplate(message) {
     </div>
   `;
 }
+
+/**
+ * Returns the HTML template for empty search results.
+ *
+ * @returns {string} 
+ */
+function getNoSearchResultsTemplate() {
+  return `
+    <div class="statusCard">
+      <p>Keine Pokémon gefunden.</p>
+    </div>
+  `;
+}

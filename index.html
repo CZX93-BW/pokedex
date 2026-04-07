@@ -15,7 +15,24 @@
 <body>
   <header class="pageHeader">
     <div class="contentWrapper">
-      <h1>Pokédex</h1>
+      <div class="pageHeaderContent">
+        <h1>Pokédex</h1>
+
+        <div class="searchBar">
+          <input
+            id="pokemonSearchInput"
+            class="searchInput"
+            type="text"
+            placeholder="Pokémon suchen..."
+            aria-label="Pokémon suchen">
+          <button
+            class="searchButton"
+            type="button"
+            onclick="handlePokemonSearchButtonClick()">
+            Suchen
+          </button>
+        </div>
+      </div>
     </div>
   </header>
 
