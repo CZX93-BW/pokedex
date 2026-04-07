@@ -1,3 +1,6 @@
+const firstPokemonId = 1;
+const lastPokemonId = 1025;
+
 /**
  * Starts the application.
  */
@@ -26,17 +29,39 @@ async function loadAndRenderPokemonList() {
 /**
  * Opens the pokemon details view.
  *
- * @param {string} pokemonUrl 
+ * @param {number} pokemonId - The id of the selected pokemon.
  */
 async function openPokemonDetails(pokemonId) {
+  if (!isValidPokemonId(pokemonId)) {
+    return;
+  }
+
+  renderDialogLoadingState();
+
   const pokemonDetails = await loadPokemonDetailsById(pokemonId);
+
+  if (!pokemonDetails) {
+    renderDialogErrorState('Die Detaildaten konnten nicht geladen werden.');
+    return;
+  }
+
   renderPokemonDetails(pokemonDetails);
+}
+
+/**
+ * Checks if the pokemon id is valid.
+ *
+ * @param {number} pokemonId - The pokemon id to check.
+ * @returns {boolean} True if the id is valid.
+ */
+function isValidPokemonId(pokemonId) {
+  return pokemonId >= firstPokemonId && pokemonId <= lastPokemonId;
 }
 
 /**
  * Handles the pokemon search.
  *
- * @param {string} searchValue 
+ * @param {string} searchValue - The search input value.
  */
 function handlePokemonSearch(searchValue) {
   console.log('Search not implemented yet:', searchValue);
@@ -73,7 +98,7 @@ function initializeEscapeKeyClose() {
 /**
  * Handles the escape key for dialog closing.
  *
- * @param {KeyboardEvent} event 
+ * @param {KeyboardEvent} event - The keyboard event.
  */
 function handleDialogEscapeKey(event) {
   if (event.key !== 'Escape') {

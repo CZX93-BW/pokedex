@@ -11,10 +11,10 @@
   --color-border: #dddddd;
   --color-surface: #fafafa;
   --color-shadow: rgba(0, 0, 0, 0.08);
-  --color-type-badge: #eeeeee;
   --color-overlay: rgba(0, 0, 0, 0.5);
   --color-tag-background: #f0f0f0;
   --color-stat-background: #f7f7f7;
+  --color-button-disabled: #cfcfcf;
 
   /* Pokemon Type Colors */
   --type-normal: #a8a878;
@@ -69,10 +69,6 @@ body {
   color: var(--color-text);
 }
 
-.hidden {
-  display: none;
-}
-
 /* =========================
    Layout
    ========================= */
@@ -124,6 +120,12 @@ body {
 
 .statusCard p {
   margin: 0;
+}
+
+.dialogStatusCard {
+  box-shadow: none;
+  border: none;
+  background-color: transparent;
 }
 
 .loadingSpinner {
@@ -286,6 +288,30 @@ body {
   cursor: pointer;
 }
 
+.pokemonDialogNavigation {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-medium);
+  margin-right: 40px;
+}
+
+.pokemonDialogNavButton {
+  min-width: 48px;
+  padding: 10px 14px;
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border-radius: var(--border-radius-medium);
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.pokemonDialogNavButton.disabled {
+  background-color: var(--color-button-disabled);
+  cursor: not-allowed;
+}
+
 .pokemonDialogId {
   font-size: 14px;
   font-weight: 700;
@@ -402,5 +428,9 @@ body {
 
   .pokemonDialogTitle {
     font-size: 24px;
+  }
+
+  .pokemonDialogNavigation {
+    margin-right: 32px;
   }
 }

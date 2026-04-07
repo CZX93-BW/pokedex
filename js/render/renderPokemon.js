@@ -1,7 +1,7 @@
 /**
  * Renders the pokemon list into the DOM.
  *
- * @param {Array} pokemonList 
+ * @param {Array} pokemonList - The pokemon list from the API.
  */
 function renderPokemonList(pokemonList) {
   const pokemonListContainer = getElementById('pokemonList');
@@ -18,8 +18,8 @@ function renderPokemonList(pokemonList) {
 /**
  * Renders all pokemon list items.
  *
- * @param {Array} pokemonList
- * @param {HTMLElement} pokemonListContainer 
+ * @param {Array} pokemonList - The pokemon list from the API.
+ * @param {HTMLElement} pokemonListContainer - The list container element.
  */
 function renderPokemonListItems(pokemonList, pokemonListContainer) {
   pokemonList.forEach((pokemon) => {
@@ -28,18 +28,9 @@ function renderPokemonListItems(pokemonList, pokemonListContainer) {
 }
 
 /**
- * Renders one pokemon card.
- *
- * @param {Object} pokemon 
- */
-function renderPokemonCard(pokemon) {
-  console.log('Card rendering not implemented yet:', pokemon);
-}
-
-/**
  * Renders the details of one pokemon.
  *
- * @param {Object | null} pokemonDetails 
+ * @param {Object | null} pokemonDetails - The loaded pokemon details.
  */
 function renderPokemonDetails(pokemonDetails) {
   const pokemonDialog = getElementById('pokemonDialog');
@@ -70,7 +61,7 @@ function renderLoadingState() {
 /**
  * Renders an error message.
  *
- * @param {string} message 
+ * @param {string} message - The error message text.
  */
 function renderErrorMessage(message) {
   const pokemonStatusContainer = getElementById('pokemonStatus');
@@ -81,6 +72,38 @@ function renderErrorMessage(message) {
 
   clearPokemonList();
   pokemonStatusContainer.innerHTML = getErrorTemplate(message);
+}
+
+/**
+ * Renders the loading state inside the dialog.
+ */
+function renderDialogLoadingState() {
+  const pokemonDialog = getElementById('pokemonDialog');
+  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+
+  if (!pokemonDialog || !pokemonDialogOverlay) {
+    return;
+  }
+
+  pokemonDialog.innerHTML = getDialogLoadingTemplate();
+  pokemonDialogOverlay.classList.remove('hidden');
+}
+
+/**
+ * Renders an error message inside the dialog.
+ *
+ * @param {string} message - The error message text.
+ */
+function renderDialogErrorState(message) {
+  const pokemonDialog = getElementById('pokemonDialog');
+  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+
+  if (!pokemonDialog || !pokemonDialogOverlay) {
+    return;
+  }
+
+  pokemonDialog.innerHTML = getDialogErrorTemplate(message);
+  pokemonDialogOverlay.classList.remove('hidden');
 }
 
 /**
@@ -113,19 +136,21 @@ function clearPokemonStatus() {
  * Closes the pokemon detail dialog.
  */
 function closePokemonDetails() {
+  const pokemonDialog = getElementById('pokemonDialog');
   const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
 
-  if (!pokemonDialogOverlay) {
+  if (!pokemonDialog || !pokemonDialogOverlay) {
     return;
   }
 
+  pokemonDialog.innerHTML = '';
   pokemonDialogOverlay.classList.add('hidden');
 }
 
 /**
  * Prevents closing the dialog when clicking inside the dialog card.
  *
- * @param {Event} event 
+ * @param {Event} event - The click event.
  */
 function stopDialogClose(event) {
   event.stopPropagation();
