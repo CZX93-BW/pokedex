@@ -16,6 +16,21 @@ function renderPokemonList(pokemonList) {
 }
 
 /**
+ * Appends pokemon to the existing list.
+ *
+ * @param {Array} pokemonList 
+ */
+function appendPokemonList(pokemonList) {
+  const pokemonListContainer = getElementById('pokemonList');
+
+  if (!pokemonListContainer) {
+    return;
+  }
+
+  renderPokemonListItems(pokemonList, pokemonListContainer);
+}
+
+/**
  * Renders all pokemon list items.
  *
  * @param {Array} pokemonList 
@@ -121,6 +136,72 @@ function renderDialogErrorState(message) {
 }
 
 /**
+ * Sets the loading state for the load more button.
+ */
+function setLoadMoreButtonLoadingState() {
+  const loadMoreButton = getElementById('loadMoreButton');
+
+  if (!loadMoreButton) {
+    return;
+  }
+
+  loadMoreButton.disabled = true;
+  loadMoreButton.textContent = 'Lädt...';
+}
+
+/**
+ * Resets the load more button state.
+ */
+function resetLoadMoreButtonState() {
+  const loadMoreButton = getElementById('loadMoreButton');
+
+  if (!loadMoreButton) {
+    return;
+  }
+
+  loadMoreButton.disabled = false;
+  loadMoreButton.textContent = 'Mehr laden';
+}
+
+/**
+ * Updates the visibility of the load more button.
+ */
+function updateLoadMoreVisibility() {
+  if (hasLoadedAllPokemon()) {
+    hideLoadMoreButton();
+    return;
+  }
+
+  showLoadMoreButton();
+}
+
+/**
+ * Shows the load more button.
+ */
+function showLoadMoreButton() {
+  const loadMoreWrapper = getElementById('loadMoreWrapper');
+
+  if (!loadMoreWrapper) {
+    return;
+  }
+
+  loadMoreWrapper.classList.remove('hidden');
+}
+
+/**
+ * Hides the load more button.
+ */
+function hideLoadMoreButton() {
+  const loadMoreWrapper = getElementById('loadMoreWrapper');
+
+  if (!loadMoreWrapper) {
+    return;
+  }
+
+  loadMoreWrapper.classList.add('hidden');
+}
+
+/**
  * Clears the pokemon list container.
  */
 function clearPokemonList() {
@@ -168,21 +249,4 @@ function closePokemonDetails() {
  */
 function stopDialogClose(event) {
   event.stopPropagation();
-}
-
-/**
- * Appends pokemon to the existing list.
- *
- * @param {Array} pokemonList 
- */
-function appendPokemonList(pokemonList) {
-  const pokemonListContainer = getElementById('pokemonList');
-
-  if (!pokemonListContainer) {
-    return;
-  }
-
-  pokemonList.forEach((pokemon) => {
-    pokemonListContainer.innerHTML += getPokemonCardTemplate(pokemon);
-  });
 }

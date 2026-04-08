@@ -41,6 +41,16 @@
       <section class="pokemonSection">
         <div id="pokemonStatus" class="pokemonStatus"></div>
         <div id="pokemonList" class="pokemonList"></div>
+
+        <div id="loadMoreWrapper" class="loadMoreWrapper">
+          <button
+            id="loadMoreButton"
+            class="loadMoreButton"
+            type="button"
+            onclick="loadMorePokemon()">
+            Mehr laden
+          </button>
+        </div>
       </section>
     </div>
   </main>
@@ -48,10 +58,5 @@
   <div id="pokemonDialogOverlay" class="pokemonDialogOverlay hidden">
     <div id="pokemonDialog" class="pokemonDialog"></div>
   </div>
-  <div class="loadMoreWrapper">
-  <button class="loadMoreButton" onclick="loadMorePokemon()">
-    Mehr laden
-  </button>
-</div>
 </body>
 </html>

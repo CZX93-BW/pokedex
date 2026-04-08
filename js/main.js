@@ -1,6 +1,5 @@
 const firstPokemonId = 1;
 const lastPokemonId = 1025;
-
 const pokemonBatchSize = 20;
 
 let allPokemon = [];
@@ -20,6 +19,7 @@ async function initializeApp() {
  */
 async function loadAndRenderPokemonList() {
   renderLoadingState();
+  hideLoadMoreButton();
 
   const pokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
   const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
@@ -33,6 +33,37 @@ async function loadAndRenderPokemonList() {
   currentOffset += pokemonBatchSize;
 
   renderPokemonList(allPokemon);
+  updateLoadMoreVisibility();
+}
+
+/**
+ * Loads more pokemon and appends them to the list.
+ */
+async function loadMorePokemon() {
+  if (isLoadingMore || hasLoadedAllPokemon()) {
+    return;
+  }
+
+  isLoadingMore = true;
+  setLoadMoreButtonLoadingState();
+
+  const newPokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
+  const detailedPokemonList = await loadDetailedPokemonList(newPokemonList);
+
+  if (detailedPokemonList.length === 0) {
+    resetLoadMoreButtonState();
+    isLoadingMore = false;
+    return;
+  }
+
+  allPokemon = [...allPokemon, ...detailedPokemonList];
+  currentOffset += pokemonBatchSize;
+
+  appendPokemonList(detailedPokemonList);
+  resetLoadMoreButtonState();
+  updateLoadMoreVisibility();
+
+  isLoadingMore = false;
 }
 
 /**
@@ -61,10 +92,19 @@ async function openPokemonDetails(pokemonId) {
  * Checks if the pokemon id is valid.
  *
  * @param {number} pokemonId 
- * @returns {boolean} 
+ * @returns {boolean}
  */
 function isValidPokemonId(pokemonId) {
   return pokemonId >= firstPokemonId && pokemonId <= lastPokemonId;
+}
+
+/**
+ * Checks if all pokemon have already been loaded.
+ *
+ * @returns {boolean} 
+ */
+function hasLoadedAllPokemon() {
+  return currentOffset >= lastPokemonId;
 }
 
 /**
@@ -90,10 +130,13 @@ function handlePokemonSearch(searchValue) {
 
   if (isEmptyString(normalizedSearchValue)) {
     renderPokemonList(allPokemon);
+    updateLoadMoreVisibility();
     return;
   }
 
   const filteredPokemon = filterPokemonByName(normalizedSearchValue);
+
+  hideLoadMoreButton();
 
   if (filteredPokemon.length === 0) {
     renderNoSearchResults();
@@ -160,7 +203,7 @@ function initializeSearchInputKeydown() {
 /**
  * Handles the escape key for dialog closing.
  *
- * @param {KeyboardEvent} event 
+ * @param {KeyboardEvent} event
  */
 function handleDialogEscapeKey(event) {
   if (event.key !== 'Escape') {
@@ -173,7 +216,7 @@ function handleDialogEscapeKey(event) {
 /**
  * Handles the search input keydown event.
  *
- * @param {KeyboardEvent} event 
+ * @param {KeyboardEvent} event
  */
 function handleSearchInputKeydown(event) {
   if (event.key !== 'Enter') {
@@ -181,27 +224,6 @@ function handleSearchInputKeydown(event) {
   }
 
   handlePokemonSearchButtonClick();
-}
-
-/**
- * Loads more pokemon and appends them to the list.
- */
-async function loadMorePokemon() {
-  if (isLoadingMore) {
-    return;
-  }
-
-  isLoadingMore = true;
-
-  const newPokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
-  const detailedPokemon = await loadDetailedPokemonList(newPokemonList);
-
-  allPokemon = [...allPokemon, ...detailedPokemon];
-
-  appendPokemonList(detailedPokemon);
-
-  currentOffset += pokemonBatchSize;
-  isLoadingMore = false;
 }
 
 initializeApp();
