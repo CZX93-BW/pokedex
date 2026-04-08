@@ -169,3 +169,20 @@ function closePokemonDetails() {
 function stopDialogClose(event) {
   event.stopPropagation();
 }
+
+/**
+ * Appends pokemon to the existing list.
+ *
+ * @param {Array} pokemonList 
+ */
+function appendPokemonList(pokemonList) {
+  const pokemonListContainer = getElementById('pokemonList');
+
+  if (!pokemonListContainer) {
+    return;
+  }
+
+  pokemonList.forEach((pokemon) => {
+    pokemonListContainer.innerHTML += getPokemonCardTemplate(pokemon);
+  });
+}

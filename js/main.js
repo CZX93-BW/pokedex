@@ -1,7 +1,11 @@
 const firstPokemonId = 1;
 const lastPokemonId = 1025;
 
+const pokemonBatchSize = 20;
+
 let allPokemon = [];
+let currentOffset = 0;
+let isLoadingMore = false;
 
 /**
  * Starts the application.
@@ -17,7 +21,7 @@ async function initializeApp() {
 async function loadAndRenderPokemonList() {
   renderLoadingState();
 
-  const pokemonList = await loadPokemonList();
+  const pokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
   const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
 
   if (detailedPokemonList.length === 0) {
@@ -26,6 +30,8 @@ async function loadAndRenderPokemonList() {
   }
 
   allPokemon = detailedPokemonList;
+  currentOffset += pokemonBatchSize;
+
   renderPokemonList(allPokemon);
 }
 
@@ -175,6 +181,27 @@ function handleSearchInputKeydown(event) {
   }
 
   handlePokemonSearchButtonClick();
+}
+
+/**
+ * Loads more pokemon and appends them to the list.
+ */
+async function loadMorePokemon() {
+  if (isLoadingMore) {
+    return;
+  }
+
+  isLoadingMore = true;
+
+  const newPokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
+  const detailedPokemon = await loadDetailedPokemonList(newPokemonList);
+
+  allPokemon = [...allPokemon, ...detailedPokemon];
+
+  appendPokemonList(detailedPokemon);
+
+  currentOffset += pokemonBatchSize;
+  isLoadingMore = false;
 }
 
 initializeApp();

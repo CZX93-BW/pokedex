@@ -1,15 +1,23 @@
-const pokemonApiUrl = 'https://pokeapi.co/api/v2/pokemon?limit=20';
+const pokemonApiBaseUrl = 'https://pokeapi.co/api/v2/pokemon';
 
 /**
- * Loads the pokemon list from the API.
+ * Loads the pokemon list with pagination.
  *
- * @returns {Promise<Array>} 
+ * @param {number} limit - The number of pokemon to load.
+ * @param {number} offset - The offset for pagination.
+ * @returns {Promise<Array>} The loaded pokemon list.
  */
-async function loadPokemonList() {
+async function loadPokemonList(limit, offset) {
   try {
-    const response = await fetch(pokemonApiUrl);
-    const data = await response.json();
+    const url = `${pokemonApiBaseUrl}?limit=${limit}&offset=${offset}`;
 
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const data = await response.json();
     return data.results;
   } catch (error) {
     handleFetchError(error);
