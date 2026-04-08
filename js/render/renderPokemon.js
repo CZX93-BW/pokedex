@@ -57,6 +57,7 @@ function renderPokemonDetails(pokemonDetails) {
 
   pokemonDialog.innerHTML = getPokemonDetailTemplate(pokemonDetails);
   pokemonDialogOverlay.classList.remove('hidden');
+  setBodyScrollLock(true);
 }
 
 /**
@@ -76,7 +77,7 @@ function renderLoadingState() {
 /**
  * Renders an error message.
  *
- * @param {string} message - The error message text.
+ * @param {string} message 
  */
 function renderErrorMessage(message) {
   const pokemonStatusContainer = getElementById('pokemonStatus');
@@ -116,6 +117,7 @@ function renderDialogLoadingState() {
 
   pokemonDialog.innerHTML = getDialogLoadingTemplate();
   pokemonDialogOverlay.classList.remove('hidden');
+  setBodyScrollLock(true);
 }
 
 /**
@@ -133,6 +135,7 @@ function renderDialogErrorState(message) {
 
   pokemonDialog.innerHTML = getDialogErrorTemplate(message);
   pokemonDialogOverlay.classList.remove('hidden');
+  setBodyScrollLock(true);
 }
 
 /**
@@ -202,6 +205,15 @@ function hideLoadMoreButton() {
 }
 
 /**
+ * Sets the body scroll lock state.
+ *
+ * @param {boolean} isLocked 
+ */
+function setBodyScrollLock(isLocked) {
+  document.body.classList.toggle('dialogOpen', isLocked);
+}
+
+/**
  * Clears the pokemon list container.
  */
 function clearPokemonList() {
@@ -240,6 +252,7 @@ function closePokemonDetails() {
 
   pokemonDialog.innerHTML = '';
   pokemonDialogOverlay.classList.add('hidden');
+  setBodyScrollLock(false);
 }
 
 /**

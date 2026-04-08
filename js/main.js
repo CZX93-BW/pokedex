@@ -92,7 +92,7 @@ async function openPokemonDetails(pokemonId) {
  * Checks if the pokemon id is valid.
  *
  * @param {number} pokemonId 
- * @returns {boolean}
+ * @returns {boolean} 
  */
 function isValidPokemonId(pokemonId) {
   return pokemonId >= firstPokemonId && pokemonId <= lastPokemonId;
@@ -159,6 +159,23 @@ function filterPokemonByName(searchValue) {
 }
 
 /**
+ * Handles keyboard interaction for pokemon cards.
+ *
+ * @param {KeyboardEvent} event 
+ * @param {number} pokemonId 
+ */
+function handlePokemonCardKeydown(event, pokemonId) {
+  const triggerKeys = ['Enter', ' '];
+
+  if (!triggerKeys.includes(event.key)) {
+    return;
+  }
+
+  event.preventDefault();
+  openPokemonDetails(pokemonId);
+}
+
+/**
  * Initializes all event listeners.
  */
 function initializeEventListeners() {
@@ -203,7 +220,7 @@ function initializeSearchInputKeydown() {
 /**
  * Handles the escape key for dialog closing.
  *
- * @param {KeyboardEvent} event
+ * @param {KeyboardEvent} event 
  */
 function handleDialogEscapeKey(event) {
   if (event.key !== 'Escape') {
@@ -216,7 +233,7 @@ function handleDialogEscapeKey(event) {
 /**
  * Handles the search input keydown event.
  *
- * @param {KeyboardEvent} event
+ * @param {KeyboardEvent} event 
  */
 function handleSearchInputKeydown(event) {
   if (event.key !== 'Enter') {

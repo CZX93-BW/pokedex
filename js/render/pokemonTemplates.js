@@ -13,7 +13,11 @@ function getPokemonCardTemplate(pokemon) {
   return `
     <article
       class="pokemonCard"
-      onclick="openPokemonDetails(${pokemonId})">
+      tabindex="0"
+      role="button"
+      aria-label="${pokemonName} öffnen"
+      onclick="openPokemonDetails(${pokemonId})"
+      onkeydown="handlePokemonCardKeydown(event, ${pokemonId})">
       <span class="pokemonCardId">#${pokemonId}</span>
       <h2 class="pokemonCardTitle">${pokemonName}</h2>
       <div class="pokemonCardImageWrapper">

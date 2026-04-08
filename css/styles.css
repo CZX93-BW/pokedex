@@ -69,6 +69,10 @@ body {
   color: var(--color-text);
 }
 
+body.dialogOpen {
+  overflow: hidden;
+}
+
 .hidden {
   display: none;
 }
@@ -92,6 +96,13 @@ body {
   margin: 0;
 }
 
+.pageHeaderContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-large);
+}
+
 .pageMain {
   padding: var(--spacing-large) 0;
 }
@@ -100,12 +111,9 @@ body {
   width: 100%;
 }
 
-.pageHeaderContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--spacing-large);
-}
+/* =========================
+   Search
+   ========================= */
 
 .searchBar {
   display: flex;
@@ -130,7 +138,12 @@ body {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  transition: opacity 0.2s ease;
 }
+
+/* =========================
+   Load More
+   ========================= */
 
 .loadMoreWrapper {
   display: flex;
@@ -147,6 +160,7 @@ body {
   font: inherit;
   font-weight: 700;
   cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
 .loadMoreButton:disabled {
@@ -174,10 +188,6 @@ body {
   border-radius: var(--border-radius-medium);
   box-shadow: 0 4px 12px var(--color-shadow);
   text-align: center;
-}
-
-.statusCard p {
-  margin: 0;
 }
 
 .dialogStatusCard {
@@ -220,6 +230,12 @@ body {
   border-radius: var(--border-radius-medium);
   box-shadow: 0 4px 12px var(--color-shadow);
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pokemonCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px var(--color-shadow);
 }
 
 .pokemonCardId {
@@ -234,7 +250,7 @@ body {
 }
 
 /* =========================
-   Pokemon Image
+   Images
    ========================= */
 
 .pokemonCardImageWrapper,
@@ -249,16 +265,14 @@ body {
 
 .pokemonCardImageWrapper img {
   max-width: var(--image-size-small);
-  height: auto;
 }
 
 .pokemonDialogImageWrapper img {
   max-width: var(--image-size-large);
-  height: auto;
 }
 
 /* =========================
-   Pokemon Types
+   Types
    ========================= */
 
 .pokemonCardTypes {
@@ -268,9 +282,6 @@ body {
 }
 
 .pokemonTypeBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 6px 12px;
   border-radius: var(--border-radius-small);
   font-size: 14px;
@@ -278,31 +289,29 @@ body {
   color: var(--color-white);
 }
 
-/* =========================
-   Pokemon Type Colors
-   ========================= */
+/* Type Colors */
 
-.type-normal { background-color: var(--type-normal); }
-.type-fire { background-color: var(--type-fire); }
-.type-water { background-color: var(--type-water); }
-.type-grass { background-color: var(--type-grass); }
-.type-electric { background-color: var(--type-electric); color: var(--color-text); }
-.type-ice { background-color: var(--type-ice); color: var(--color-text); }
-.type-fighting { background-color: var(--type-fighting); }
-.type-poison { background-color: var(--type-poison); }
-.type-ground { background-color: var(--type-ground); color: var(--color-text); }
-.type-flying { background-color: var(--type-flying); }
-.type-psychic { background-color: var(--type-psychic); }
-.type-bug { background-color: var(--type-bug); color: var(--color-text); }
-.type-rock { background-color: var(--type-rock); color: var(--color-text); }
-.type-ghost { background-color: var(--type-ghost); }
-.type-dragon { background-color: var(--type-dragon); }
-.type-dark { background-color: var(--type-dark); }
-.type-steel { background-color: var(--type-steel); color: var(--color-text); }
-.type-fairy { background-color: var(--type-fairy); color: var(--color-text); }
+.type-normal { background: var(--type-normal); }
+.type-fire { background: var(--type-fire); }
+.type-water { background: var(--type-water); }
+.type-grass { background: var(--type-grass); }
+.type-electric { background: var(--type-electric); color: var(--color-text); }
+.type-ice { background: var(--type-ice); color: var(--color-text); }
+.type-fighting { background: var(--type-fighting); }
+.type-poison { background: var(--type-poison); }
+.type-ground { background: var(--type-ground); color: var(--color-text); }
+.type-flying { background: var(--type-flying); }
+.type-psychic { background: var(--type-psychic); }
+.type-bug { background: var(--type-bug); color: var(--color-text); }
+.type-rock { background: var(--type-rock); color: var(--color-text); }
+.type-ghost { background: var(--type-ghost); }
+.type-dragon { background: var(--type-dragon); }
+.type-dark { background: var(--type-dark); }
+.type-steel { background: var(--type-steel); color: var(--color-text); }
+.type-fairy { background: var(--type-fairy); color: var(--color-text); }
 
 /* =========================
-   Pokemon Dialog
+   Dialog
    ========================= */
 
 .pokemonDialogOverlay {
@@ -331,9 +340,19 @@ body {
   flex-direction: column;
   gap: var(--spacing-medium);
   padding: var(--spacing-extra-large);
-  background-color: var(--color-white);
+  background: var(--color-white);
   border-radius: var(--border-radius-medium);
   box-shadow: 0 8px 24px var(--color-shadow);
+}
+
+/* =========================
+   Dialog Controls
+   ========================= */
+
+.pokemonDialogCloseButton,
+.pokemonDialogNavButton {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
 .pokemonDialogCloseButton {
@@ -343,101 +362,64 @@ body {
   border: none;
   background: transparent;
   font-size: 24px;
-  cursor: pointer;
 }
 
 .pokemonDialogNavigation {
   display: flex;
   justify-content: space-between;
-  gap: var(--spacing-medium);
   margin-right: 40px;
 }
 
 .pokemonDialogNavButton {
   min-width: 48px;
-  padding: 10px 14px;
+  padding: 10px;
   border: none;
-  background-color: var(--color-primary);
-  color: var(--color-white);
+  background: var(--color-primary);
+  color: white;
   border-radius: var(--border-radius-medium);
-  font-size: 18px;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .pokemonDialogNavButton.disabled {
-  background-color: var(--color-button-disabled);
+  background: var(--color-button-disabled);
   cursor: not-allowed;
 }
 
-.pokemonDialogId {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--color-primary);
-}
+/* =========================
+   Dialog Content
+   ========================= */
 
 .pokemonDialogTitle {
-  margin: 0;
   font-size: 32px;
-}
-
-.pokemonDialogInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-small);
-}
-
-.pokemonDialogInfo p {
   margin: 0;
-}
-
-.pokemonDialogSection {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-medium);
 }
 
 .pokemonDialogSectionTitle {
-  margin: 0;
   font-size: 20px;
-}
-
-.pokemonDialogTagList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-small);
+  margin: 0;
 }
 
 .pokemonDialogTag {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 6px 12px;
-  background-color: var(--color-tag-background);
+  background: var(--color-tag-background);
   border-radius: var(--border-radius-small);
-  font-size: 14px;
   font-weight: 700;
-}
-
-.pokemonStatsList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-small);
 }
 
 .pokemonStatItem {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 12px 14px;
-  background-color: var(--color-stat-background);
+  padding: 12px;
+  background: var(--color-stat-background);
   border-radius: var(--border-radius-medium);
 }
 
-.pokemonStatName,
-.pokemonStatValue {
-  font-size: 14px;
-  font-weight: 700;
+/* =========================
+   Accessibility
+   ========================= */
+
+:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 3px;
 }
 
 /* =========================
@@ -445,10 +427,6 @@ body {
    ========================= */
 
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
   to {
     transform: rotate(360deg);
   }
@@ -467,10 +445,6 @@ body {
     padding: var(--spacing-medium) 0;
   }
 
-  .pokemonStatus {
-    margin-bottom: var(--spacing-medium);
-  }
-
   .pokemonList {
     gap: var(--spacing-medium);
   }
@@ -480,18 +454,9 @@ body {
     padding: var(--spacing-medium);
   }
 
-  .pokemonCardTitle {
-    font-size: 20px;
-  }
-
   .pokemonDialogTitle {
     font-size: 24px;
   }
-
-  .pokemonDialogNavigation {
-    margin-right: 32px;
-  }
-}
 
   .pageHeaderContent {
     flex-direction: column;
@@ -500,10 +465,10 @@ body {
 
   .searchBar {
     flex-direction: column;
-    align-items: stretch;
   }
 
   .searchInput {
-    min-width: unset;
     width: 100%;
+    min-width: unset;
   }
+}
