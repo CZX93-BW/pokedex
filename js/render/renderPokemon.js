@@ -1,265 +1,143 @@
-/**
- * Renders the pokemon list into the DOM.
- *
- * @param {Array} pokemonList 
- */
 function renderPokemonList(pokemonList) {
-  const pokemonListContainer = getElementById('pokemonList');
-
-  if (!pokemonListContainer) {
-    return;
-  }
+  const container = getElementById('pokemonList');
+  if (!container) return;
 
   clearPokemonStatus();
   clearPokemonList();
-  renderPokemonListItems(pokemonList, pokemonListContainer);
+
+  renderPokemonListItems(pokemonList, container);
 }
 
-/**
- * Appends pokemon to the existing list.
- *
- * @param {Array} pokemonList 
- */
 function appendPokemonList(pokemonList) {
-  const pokemonListContainer = getElementById('pokemonList');
+  const container = getElementById('pokemonList');
+  if (!container) return;
 
-  if (!pokemonListContainer) {
-    return;
-  }
-
-  renderPokemonListItems(pokemonList, pokemonListContainer);
+  renderPokemonListItems(pokemonList, container);
 }
 
-/**
- * Renders all pokemon list items.
- *
- * @param {Array} pokemonList 
- * @param {HTMLElement} pokemonListContainer 
- */
-function renderPokemonListItems(pokemonList, pokemonListContainer) {
+function renderPokemonListItems(pokemonList, container) {
   pokemonList.forEach((pokemon) => {
-    pokemonListContainer.innerHTML += getPokemonCardTemplate(pokemon);
+    container.innerHTML += getPokemonCardTemplate(pokemon);
   });
 }
 
-/**
- * Renders the details of one pokemon.
- *
- * @param {Object | null} pokemonDetails 
- */
 function renderPokemonDetails(pokemonDetails) {
-  const pokemonDialog = getElementById('pokemonDialog');
-  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+  const dialog = getElementById('pokemonDialog');
+  const overlay = getElementById('pokemonDialogOverlay');
 
-  if (!pokemonDialog || !pokemonDialogOverlay || !pokemonDetails) {
-    return;
-  }
+  if (!dialog || !overlay || !pokemonDetails) return;
 
-  pokemonDialog.innerHTML = getPokemonDetailTemplate(pokemonDetails);
-  pokemonDialogOverlay.classList.remove('hidden');
+  dialog.innerHTML = getPokemonDetailTemplate(pokemonDetails);
+  overlay.classList.remove('hidden');
   setBodyScrollLock(true);
 }
 
-/**
- * Renders a loading state.
- */
 function renderLoadingState() {
-  const pokemonStatusContainer = getElementById('pokemonStatus');
-
-  if (!pokemonStatusContainer) {
-    return;
-  }
+  const status = getElementById('pokemonStatus');
+  if (!status) return;
 
   clearPokemonList();
-  pokemonStatusContainer.innerHTML = getLoadingTemplate();
+  status.innerHTML = getLoadingTemplate();
 }
 
-/**
- * Renders an error message.
- *
- * @param {string} message 
- */
 function renderErrorMessage(message) {
-  const pokemonStatusContainer = getElementById('pokemonStatus');
-
-  if (!pokemonStatusContainer) {
-    return;
-  }
+  const status = getElementById('pokemonStatus');
+  if (!status) return;
 
   clearPokemonList();
-  pokemonStatusContainer.innerHTML = getErrorTemplate(message);
+  status.innerHTML = getErrorTemplate(message);
 }
 
-/**
- * Renders a message for empty search results.
- */
 function renderNoSearchResults() {
-  const pokemonStatusContainer = getElementById('pokemonStatus');
-
-  if (!pokemonStatusContainer) {
-    return;
-  }
+  const status = getElementById('pokemonStatus');
+  if (!status) return;
 
   clearPokemonList();
-  pokemonStatusContainer.innerHTML = getNoSearchResultsTemplate();
+  status.innerHTML = getNoSearchResultsTemplate();
 }
 
-/**
- * Renders the loading state inside the dialog.
- */
 function renderDialogLoadingState() {
-  const pokemonDialog = getElementById('pokemonDialog');
-  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+  const dialog = getElementById('pokemonDialog');
+  const overlay = getElementById('pokemonDialogOverlay');
 
-  if (!pokemonDialog || !pokemonDialogOverlay) {
-    return;
-  }
+  if (!dialog || !overlay) return;
 
-  pokemonDialog.innerHTML = getDialogLoadingTemplate();
-  pokemonDialogOverlay.classList.remove('hidden');
+  dialog.innerHTML = getDialogLoadingTemplate();
+  overlay.classList.remove('hidden');
   setBodyScrollLock(true);
 }
 
-/**
- * Renders an error message inside the dialog.
- *
- * @param {string} message 
- */
 function renderDialogErrorState(message) {
-  const pokemonDialog = getElementById('pokemonDialog');
-  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+  const dialog = getElementById('pokemonDialog');
+  const overlay = getElementById('pokemonDialogOverlay');
 
-  if (!pokemonDialog || !pokemonDialogOverlay) {
-    return;
-  }
+  if (!dialog || !overlay) return;
 
-  pokemonDialog.innerHTML = getDialogErrorTemplate(message);
-  pokemonDialogOverlay.classList.remove('hidden');
-  setBodyScrollLock(true);
+  dialog.innerHTML = getDialogErrorTemplate(message);
+  overlay.classList.remove('hidden');
 }
 
-/**
- * Sets the loading state for the load more button.
- */
-function setLoadMoreButtonLoadingState() {
-  const loadMoreButton = getElementById('loadMoreButton');
-
-  if (!loadMoreButton) {
-    return;
-  }
-
-  loadMoreButton.disabled = true;
-  loadMoreButton.textContent = 'Lädt...';
+function clearPokemonList() {
+  const container = getElementById('pokemonList');
+  if (container) container.innerHTML = '';
 }
 
-/**
- * Resets the load more button state.
- */
-function resetLoadMoreButtonState() {
-  const loadMoreButton = getElementById('loadMoreButton');
-
-  if (!loadMoreButton) {
-    return;
-  }
-
-  loadMoreButton.disabled = false;
-  loadMoreButton.textContent = 'Mehr laden';
+function clearPokemonStatus() {
+  const status = getElementById('pokemonStatus');
+  if (status) status.innerHTML = '';
 }
 
-/**
- * Updates the visibility of the load more button.
- */
-function updateLoadMoreVisibility() {
-  if (hasLoadedAllPokemon()) {
-    hideLoadMoreButton();
-    return;
-  }
+function closePokemonDetails() {
+  const dialog = getElementById('pokemonDialog');
+  const overlay = getElementById('pokemonDialogOverlay');
 
-  showLoadMoreButton();
+  if (!dialog || !overlay) return;
+
+  dialog.innerHTML = '';
+  overlay.classList.add('hidden');
+  setBodyScrollLock(false);
 }
 
-/**
- * Shows the load more button.
- */
-function showLoadMoreButton() {
-  const loadMoreWrapper = getElementById('loadMoreWrapper');
-
-  if (!loadMoreWrapper) {
-    return;
-  }
-
-  loadMoreWrapper.classList.remove('hidden');
-}
-
-/**
- * Hides the load more button.
- */
-function hideLoadMoreButton() {
-  const loadMoreWrapper = getElementById('loadMoreWrapper');
-
-  if (!loadMoreWrapper) {
-    return;
-  }
-
-  loadMoreWrapper.classList.add('hidden');
-}
-
-/**
- * Sets the body scroll lock state.
- *
- * @param {boolean} isLocked 
- */
 function setBodyScrollLock(isLocked) {
   document.body.classList.toggle('dialogOpen', isLocked);
 }
 
-/**
- * Clears the pokemon list container.
- */
-function clearPokemonList() {
-  const pokemonListContainer = getElementById('pokemonList');
+/* =========================
+   Load More Loading
+   ========================= */
 
-  if (!pokemonListContainer) {
-    return;
-  }
+function showLoadMoreLoading() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (!wrapper) return;
 
-  pokemonListContainer.innerHTML = '';
+  wrapper.innerHTML = getLoadMoreLoadingTemplate();
 }
 
-/**
- * Clears the pokemon status container.
- */
-function clearPokemonStatus() {
-  const pokemonStatusContainer = getElementById('pokemonStatus');
+function hideLoadMoreLoading() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (!wrapper) return;
 
-  if (!pokemonStatusContainer) {
-    return;
-  }
-
-  pokemonStatusContainer.innerHTML = '';
+  wrapper.innerHTML = `
+    <button class="loadMoreButton" onclick="loadMorePokemon()">
+      Mehr laden
+    </button>
+  `;
 }
 
-/**
- * Closes the pokemon detail dialog.
- */
-function closePokemonDetails() {
-  const pokemonDialog = getElementById('pokemonDialog');
-  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
-
-  if (!pokemonDialog || !pokemonDialogOverlay) {
-    return;
-  }
-
-  pokemonDialog.innerHTML = '';
-  pokemonDialogOverlay.classList.add('hidden');
-  setBodyScrollLock(false);
+function showLoadMoreButton() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (wrapper) wrapper.classList.remove('hidden');
 }
 
-/**
- * Prevents closing the dialog when clicking inside the dialog card.
- *
- * @param {Event} event 
- */
-function stopDialogClose(event) {
-  event.stopPropagation();
+function hideLoadMoreButton() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (wrapper) wrapper.classList.add('hidden');
+}
+
+function updateLoadMoreVisibility() {
+  if (hasLoadedAllPokemon()) {
+    hideLoadMoreButton();
+  } else {
+    showLoadMoreButton();
+  }
 }

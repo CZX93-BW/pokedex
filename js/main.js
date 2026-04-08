@@ -45,13 +45,16 @@ async function loadMorePokemon() {
   }
 
   isLoadingMore = true;
-  setLoadMoreButtonLoadingState();
+
+  showLoadMoreLoading();
+
+  await delay(600);
 
   const newPokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
   const detailedPokemonList = await loadDetailedPokemonList(newPokemonList);
 
   if (detailedPokemonList.length === 0) {
-    resetLoadMoreButtonState();
+    hideLoadMoreLoading();
     isLoadingMore = false;
     return;
   }
@@ -60,16 +63,27 @@ async function loadMorePokemon() {
   currentOffset += pokemonBatchSize;
 
   appendPokemonList(detailedPokemonList);
-  resetLoadMoreButtonState();
+
+  hideLoadMoreLoading();
   updateLoadMoreVisibility();
 
   isLoadingMore = false;
 }
 
 /**
+ * Creates a delay.
+ *
+ * @param {number} time - Delay in ms
+ * @returns {Promise}
+ */
+function delay(time) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+
+/**
  * Opens the pokemon details view.
  *
- * @param {number} pokemonId 
+ * @param {number} pokemonId
  */
 async function openPokemonDetails(pokemonId) {
   if (!isValidPokemonId(pokemonId)) {
@@ -89,80 +103,21 @@ async function openPokemonDetails(pokemonId) {
 }
 
 /**
- * Checks if the pokemon id is valid.
- *
- * @param {number} pokemonId 
- * @returns {boolean} 
+ * Checks if id is valid.
  */
 function isValidPokemonId(pokemonId) {
   return pokemonId >= firstPokemonId && pokemonId <= lastPokemonId;
 }
 
 /**
- * Checks if all pokemon have already been loaded.
- *
- * @returns {boolean} 
+ * Checks if all pokemon loaded.
  */
 function hasLoadedAllPokemon() {
   return currentOffset >= lastPokemonId;
 }
 
 /**
- * Handles the pokemon search button click.
- */
-function handlePokemonSearchButtonClick() {
-  const searchInput = getElementById('pokemonSearchInput');
-
-  if (!searchInput) {
-    return;
-  }
-
-  handlePokemonSearch(searchInput.value);
-}
-
-/**
- * Handles the pokemon search.
- *
- * @param {string} searchValue 
- */
-function handlePokemonSearch(searchValue) {
-  const normalizedSearchValue = searchValue.trim().toLowerCase();
-
-  if (isEmptyString(normalizedSearchValue)) {
-    renderPokemonList(allPokemon);
-    updateLoadMoreVisibility();
-    return;
-  }
-
-  const filteredPokemon = filterPokemonByName(normalizedSearchValue);
-
-  hideLoadMoreButton();
-
-  if (filteredPokemon.length === 0) {
-    renderNoSearchResults();
-    return;
-  }
-
-  renderPokemonList(filteredPokemon);
-}
-
-/**
- * Filters pokemon by name.
- *
- * @param {string} searchValue 
- * @returns {Array} 
- */
-function filterPokemonByName(searchValue) {
-  return allPokemon.filter((pokemon) => {
-    return pokemon.name.includes(searchValue);
-  });
-}
-
-/**
- * Handles keyboard interaction for pokemon cards.
- *
- * @param {KeyboardEvent} event 
- * @param {number} pokemonId 
+ * Handles pokemon card keyboard interaction.
  */
 function handlePokemonCardKeydown(event, pokemonId) {
   const triggerKeys = ['Enter', ' '];
@@ -176,71 +131,83 @@ function handlePokemonCardKeydown(event, pokemonId) {
 }
 
 /**
- * Initializes all event listeners.
+ * Handles search button click.
+ */
+function handlePokemonSearchButtonClick() {
+  const input = getElementById('pokemonSearchInput');
+  if (!input) return;
+
+  handlePokemonSearch(input.value);
+}
+
+/**
+ * Handles search logic.
+ */
+function handlePokemonSearch(searchValue) {
+  const normalized = searchValue.trim().toLowerCase();
+
+  if (normalized.length < 3) {
+    renderPokemonList(allPokemon);
+    updateLoadMoreVisibility();
+    return;
+  }
+
+  const filtered = allPokemon.filter((pokemon) =>
+    pokemon.name.includes(normalized)
+  );
+
+  hideLoadMoreButton();
+
+  if (filtered.length === 0) {
+    renderNoSearchResults();
+    return;
+  }
+
+  renderPokemonList(filtered);
+}
+
+/**
+ * Initializes all events.
  */
 function initializeEventListeners() {
   initializeDialogOverlayClick();
   initializeEscapeKeyClose();
-  initializeSearchInputKeydown();
+  initializeSearchEnter();
 }
 
 /**
- * Initializes the overlay click event.
+ * Overlay click
  */
 function initializeDialogOverlayClick() {
-  const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
+  const overlay = getElementById('pokemonDialogOverlay');
+  if (!overlay) return;
 
-  if (!pokemonDialogOverlay) {
-    return;
-  }
-
-  pokemonDialogOverlay.addEventListener('click', closePokemonDetails);
+  overlay.addEventListener('click', closePokemonDetails);
 }
 
 /**
- * Initializes the escape key event for dialog closing.
+ * ESC close
  */
 function initializeEscapeKeyClose() {
-  document.addEventListener('keydown', handleDialogEscapeKey);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closePokemonDetails();
+    }
+  });
 }
 
 /**
- * Initializes the enter key event for the search input.
+ * Search Enter
  */
-function initializeSearchInputKeydown() {
-  const searchInput = getElementById('pokemonSearchInput');
+function initializeSearchEnter() {
+  const input = getElementById('pokemonSearchInput');
+  if (!input) return;
 
-  if (!searchInput) {
-    return;
-  }
-
-  searchInput.addEventListener('keydown', handleSearchInputKeydown);
-}
-
-/**
- * Handles the escape key for dialog closing.
- *
- * @param {KeyboardEvent} event 
- */
-function handleDialogEscapeKey(event) {
-  if (event.key !== 'Escape') {
-    return;
-  }
-
-  closePokemonDetails();
-}
-
-/**
- * Handles the search input keydown event.
- *
- * @param {KeyboardEvent} event 
- */
-function handleSearchInputKeydown(event) {
-  if (event.key !== 'Enter') {
-    return;
-  }
-
-  handlePokemonSearchButtonClick();
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      handlePokemonSearchButtonClick();
+    }
+  });
 }
 
 initializeApp();

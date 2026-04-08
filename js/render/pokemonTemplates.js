@@ -1,8 +1,8 @@
 /**
  * Returns the HTML template for one pokemon card.
  *
- * @param {Object} pokemon 
- * @returns {string} 
+ * @param {Object} pokemon - The pokemon data object.
+ * @returns {string} The HTML template string.
  */
 function getPokemonCardTemplate(pokemon) {
   const pokemonId = pokemon.id;
@@ -33,8 +33,8 @@ function getPokemonCardTemplate(pokemon) {
 /**
  * Returns the HTML template for all pokemon types.
  *
- * @param {Array} pokemonTypes 
- * @returns {string} 
+ * @param {Array} pokemonTypes - The pokemon type data.
+ * @returns {string} The HTML template string.
  */
 function getPokemonTypesTemplate(pokemonTypes) {
   return pokemonTypes
@@ -45,8 +45,8 @@ function getPokemonTypesTemplate(pokemonTypes) {
 /**
  * Returns the HTML template for one pokemon type badge.
  *
- * @param {string} typeName 
- * @returns {string} 
+ * @param {string} typeName - The pokemon type name.
+ * @returns {string} The HTML template string.
  */
 function getPokemonTypeBadgeTemplate(typeName) {
   const formattedTypeName = capitalizeFirstLetter(typeName);
@@ -61,7 +61,7 @@ function getPokemonTypeBadgeTemplate(typeName) {
 /**
  * Returns the HTML template for the loading state.
  *
- * @returns {string} 
+ * @returns {string} The HTML template string.
  */
 function getLoadingTemplate() {
   return `
@@ -75,8 +75,8 @@ function getLoadingTemplate() {
 /**
  * Returns the HTML template for an error message.
  *
- * @param {string} message 
- * @returns {string} 
+ * @param {string} message - The error message text.
+ * @returns {string} The HTML template string.
  */
 function getErrorTemplate(message) {
   return `
@@ -89,12 +89,26 @@ function getErrorTemplate(message) {
 /**
  * Returns the HTML template for empty search results.
  *
- * @returns {string} 
+ * @returns {string} The HTML template string.
  */
 function getNoSearchResultsTemplate() {
   return `
     <div class="statusCard">
       <p>Keine Pokémon gefunden.</p>
+    </div>
+  `;
+}
+
+/**
+ * Returns the HTML template for the load more loading state.
+ *
+ * @returns {string} The HTML template string.
+ */
+function getLoadMoreLoadingTemplate() {
+  return `
+    <div class="loadMoreLoading">
+      <div class="pokeballLoader"></div>
+      <p>Loading...</p>
     </div>
   `;
 }
