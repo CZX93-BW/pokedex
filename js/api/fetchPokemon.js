@@ -9,9 +9,8 @@ const pokemonApiBaseUrl = 'https://pokeapi.co/api/v2/pokemon';
  */
 async function loadPokemonList(limit, offset) {
   try {
-    const url = `${pokemonApiBaseUrl}?limit=${limit}&offset=${offset}`;
-
-    const response = await fetch(url);
+    const pokemonListUrl = `${pokemonApiBaseUrl}?limit=${limit}&offset=${offset}`;
+    const response = await fetch(pokemonListUrl);
 
     if (!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
@@ -26,22 +25,31 @@ async function loadPokemonList(limit, offset) {
 }
 
 /**
- * Loads the details of one pokemon by id.
+ * Loads all pokemon names for the global search.
  *
- * @param {number} pokemonId 
- * @returns {Promise<Object | null>} 
+ * @returns {Promise<Array>} The loaded pokemon name list.
  */
-async function loadPokemonDetailsById(pokemonId) {
-  const pokemonDetailUrl = `https://pokeapi.co/api/v2/pokemon/${pokemonId}`;
+async function loadAllPokemonNames() {
+  try {
+    const response = await fetch(`${pokemonApiBaseUrl}?limit=1025`);
 
-  return loadPokemonDetails(pokemonDetailUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.results;
+  } catch (error) {
+    handleFetchError(error);
+    return [];
+  }
 }
 
 /**
  * Loads detailed data for multiple pokemon.
  *
- * @param {Array} pokemonList 
- * @returns {Promise<Array>} 
+ * @param {Array} pokemonList - The base pokemon list.
+ * @returns {Promise<Array>} The detailed pokemon data list.
  */
 async function loadDetailedPokemonList(pokemonList) {
   try {
@@ -61,14 +69,18 @@ async function loadDetailedPokemonList(pokemonList) {
 /**
  * Loads the details of one pokemon.
  *
- * @param {string} pokemonUrl 
- * @returns {Promise<Object | null>} 
+ * @param {string} pokemonUrl - The API url of the selected pokemon.
+ * @returns {Promise<Object | null>} The pokemon details.
  */
 async function loadPokemonDetails(pokemonUrl) {
   try {
     const response = await fetch(pokemonUrl);
-    const data = await response.json();
 
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const data = await response.json();
     return data;
   } catch (error) {
     handleFetchError(error);
@@ -77,9 +89,21 @@ async function loadPokemonDetails(pokemonUrl) {
 }
 
 /**
+ * Loads the details of one pokemon by id.
+ *
+ * @param {number} pokemonId - The id of the selected pokemon.
+ * @returns {Promise<Object | null>} The pokemon details.
+ */
+async function loadPokemonDetailsById(pokemonId) {
+  const pokemonDetailUrl = `${pokemonApiBaseUrl}/${pokemonId}`;
+
+  return loadPokemonDetails(pokemonDetailUrl);
+}
+
+/**
  * Handles API fetch errors.
  *
- * @param {Error} error 
+ * @param {Error} error - The thrown fetch error.
  */
 function handleFetchError(error) {
   console.error('Failed to load pokemon data:', error);

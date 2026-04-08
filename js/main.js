@@ -3,6 +3,8 @@ const lastPokemonId = 1025;
 const pokemonBatchSize = 20;
 
 let allPokemon = [];
+let allPokemonNames = [];
+
 let currentOffset = 0;
 let isLoadingMore = false;
 
@@ -11,25 +13,28 @@ let isLoadingMore = false;
  */
 async function initializeApp() {
   initializeEventListeners();
+
+  allPokemonNames = await loadAllPokemonNames();
+
   await loadAndRenderPokemonList();
 }
 
 /**
- * Loads the pokemon list and renders it.
+ * Loads pokemon list.
  */
 async function loadAndRenderPokemonList() {
   renderLoadingState();
   hideLoadMoreButton();
 
   const pokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
-  const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
+  const detailed = await loadDetailedPokemonList(pokemonList);
 
-  if (detailedPokemonList.length === 0) {
+  if (detailed.length === 0) {
     renderErrorMessage('Die Pokémon konnten nicht geladen werden.');
     return;
   }
 
-  allPokemon = detailedPokemonList;
+  allPokemon = detailed;
   currentOffset += pokemonBatchSize;
 
   renderPokemonList(allPokemon);
@@ -37,32 +42,23 @@ async function loadAndRenderPokemonList() {
 }
 
 /**
- * Loads more pokemon and appends them to the list.
+ * Load more
  */
 async function loadMorePokemon() {
-  if (isLoadingMore || hasLoadedAllPokemon()) {
-    return;
-  }
+  if (isLoadingMore || hasLoadedAllPokemon()) return;
 
   isLoadingMore = true;
-
   showLoadMoreLoading();
 
   await delay(600);
 
-  const newPokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
-  const detailedPokemonList = await loadDetailedPokemonList(newPokemonList);
+  const list = await loadPokemonList(pokemonBatchSize, currentOffset);
+  const detailed = await loadDetailedPokemonList(list);
 
-  if (detailedPokemonList.length === 0) {
-    hideLoadMoreLoading();
-    isLoadingMore = false;
-    return;
-  }
-
-  allPokemon = [...allPokemon, ...detailedPokemonList];
+  allPokemon = [...allPokemon, ...detailed];
   currentOffset += pokemonBatchSize;
 
-  appendPokemonList(detailedPokemonList);
+  appendPokemonList(detailed);
 
   hideLoadMoreLoading();
   updateLoadMoreVisibility();
@@ -71,108 +67,75 @@ async function loadMorePokemon() {
 }
 
 /**
- * Creates a delay.
- *
- * @param {number} time - Delay in ms
- * @returns {Promise}
+ * SEARCH CORE FIX
+ */
+async function handlePokemonSearch(searchValue) {
+  const value = searchValue.trim().toLowerCase();
+
+  // weniger als 3 Zeichen → reset
+  if (value.length < 3) {
+    renderPokemonList(allPokemon);
+    updateLoadMoreVisibility();
+    return;
+  }
+
+  renderLoadingState();
+  hideLoadMoreButton();
+
+  // alle Namen filtern
+  const matches = allPokemonNames.filter((pokemon) =>
+    pokemon.name.includes(value)
+  );
+
+  // max 20 Ergebnisse laden
+  const limitedMatches = matches.slice(0, 20);
+
+  if (limitedMatches.length === 0) {
+    renderNoSearchResults();
+    return;
+  }
+
+  const detailed = await loadDetailedPokemonList(limitedMatches);
+
+  renderPokemonList(detailed);
+}
+
+/**
+ * Delay helper
  */
 function delay(time) {
   return new Promise((resolve) => setTimeout(resolve, time));
 }
 
 /**
- * Opens the pokemon details view.
- *
- * @param {number} pokemonId
- */
-async function openPokemonDetails(pokemonId) {
-  if (!isValidPokemonId(pokemonId)) {
-    return;
-  }
-
-  renderDialogLoadingState();
-
-  const pokemonDetails = await loadPokemonDetailsById(pokemonId);
-
-  if (!pokemonDetails) {
-    renderDialogErrorState('Die Detaildaten konnten nicht geladen werden.');
-    return;
-  }
-
-  renderPokemonDetails(pokemonDetails);
-}
-
-/**
- * Checks if id is valid.
- */
-function isValidPokemonId(pokemonId) {
-  return pokemonId >= firstPokemonId && pokemonId <= lastPokemonId;
-}
-
-/**
- * Checks if all pokemon loaded.
+ * Utils
  */
 function hasLoadedAllPokemon() {
   return currentOffset >= lastPokemonId;
 }
 
 /**
- * Handles pokemon card keyboard interaction.
- */
-function handlePokemonCardKeydown(event, pokemonId) {
-  const triggerKeys = ['Enter', ' '];
-
-  if (!triggerKeys.includes(event.key)) {
-    return;
-  }
-
-  event.preventDefault();
-  openPokemonDetails(pokemonId);
-}
-
-/**
- * Handles search button click.
- */
-function handlePokemonSearchButtonClick() {
-  const input = getElementById('pokemonSearchInput');
-  if (!input) return;
-
-  handlePokemonSearch(input.value);
-}
-
-/**
- * Handles search logic.
- */
-function handlePokemonSearch(searchValue) {
-  const normalized = searchValue.trim().toLowerCase();
-
-  if (normalized.length < 3) {
-    renderPokemonList(allPokemon);
-    updateLoadMoreVisibility();
-    return;
-  }
-
-  const filtered = allPokemon.filter((pokemon) =>
-    pokemon.name.includes(normalized)
-  );
-
-  hideLoadMoreButton();
-
-  if (filtered.length === 0) {
-    renderNoSearchResults();
-    return;
-  }
-
-  renderPokemonList(filtered);
-}
-
-/**
- * Initializes all events.
+ * UI Events
  */
 function initializeEventListeners() {
+  initializeSearch();
   initializeDialogOverlayClick();
   initializeEscapeKeyClose();
-  initializeSearchEnter();
+}
+
+/**
+ * Search Events
+ */
+function initializeSearch() {
+  const input = getElementById('pokemonSearchInput');
+
+  if (!input) return;
+
+  input.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      handlePokemonSearch(input.value);
+    }
+  });
 }
 
 /**
@@ -192,20 +155,6 @@ function initializeEscapeKeyClose() {
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       closePokemonDetails();
-    }
-  });
-}
-
-/**
- * Search Enter
- */
-function initializeSearchEnter() {
-  const input = getElementById('pokemonSearchInput');
-  if (!input) return;
-
-  input.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      handlePokemonSearchButtonClick();
     }
   });
 }
