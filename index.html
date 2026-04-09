@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Pokédex</title>
+
   <link rel="stylesheet" href="./css/styles.css">
+
   <script src="./js/api/fetchPokemon.js" defer></script>
   <script src="./js/utils/helpers.js" defer></script>
   <script src="./js/render/pokemonTemplates.js" defer></script>
-  <script src="./js/render/renderPokemon.js" defer></script>
   <script src="./js/render/pokemonDetailTemplates.js" defer></script>
+  <script src="./js/render/renderPokemon.js" defer></script>
   <script src="./js/main.js" defer></script>
 </head>
+
 <body>
   <header class="pageHeader">
     <div class="contentWrapper">
@@ -23,12 +26,8 @@
             id="pokemonSearchInput"
             class="searchInput"
             type="text"
-            placeholder="Pokémon suchen..."
-            aria-label="Pokémon suchen">
-          <button
-            class="searchButton"
-            type="button"
-            onclick="handlePokemonSearchButtonClick()">
+            placeholder="Pokémon suchen...">
+          <button onclick="handlePokemonSearchButtonClick()" class="searchButton">
             Suchen
           </button>
         </div>
@@ -43,11 +42,7 @@
         <div id="pokemonList" class="pokemonList"></div>
 
         <div id="loadMoreWrapper" class="loadMoreWrapper">
-          <button
-            id="loadMoreButton"
-            class="loadMoreButton"
-            type="button"
-            onclick="loadMorePokemon()">
+          <button onclick="loadMorePokemon()" class="loadMoreButton">
             Mehr laden
           </button>
         </div>
@@ -55,7 +50,13 @@
     </div>
   </main>
 
-  <div id="pokemonDialogOverlay" class="pokemonDialogOverlay hidden">
+  <footer class="pageFooter">
+    <div class="contentWrapper">
+      <p>Pokédex Projekt • © Bastian Wollny 2026</p>
+    </div>
+  </footer>
+
+  <div id="pokemonDialogOverlay" class="pokemonDialogOverlay hidden" onclick="closePokemonDetails()">
     <div id="pokemonDialog" class="pokemonDialog"></div>
   </div>
 </body>
