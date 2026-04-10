@@ -376,4 +376,17 @@ function handleEscapeKeyClose(event) {
   closePokemonDetails();
 }
 
-initializeApp();
+/**
+ * Registers all application startup logic.
+ */
+
+/**
+ * Starts the application after the DOM is fully loaded.
+ *
+ * @returns {void}
+ */
+function startApplication() {
+  initializeApp();
+}
+
+document.addEventListener('DOMContentLoaded', startApplication);
