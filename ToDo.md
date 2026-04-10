@@ -7,7 +7,7 @@ Der Fokus liegt auf einer sauberen technischen Umsetzung, einer klaren Arbeitswe
 
 ---
 
-## Tag 0 – Planung, Vorbereitung und Projektstruktur
+## Tag -5 - 0 – Planung, Vorbereitung und Projektstruktur
 
 ### Ziel
 Projekt organisatorisch und technisch vorbereiten, damit die Umsetzung an den Folgetagen effizient und sauber erfolgen kann.
