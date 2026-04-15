@@ -409,7 +409,7 @@ function createPreviousButton(id) {
   }
 
   return `
-    <button class="pokemonDialogNavButton" onclick="openPokemonDetails(${id - 1})">
+    <button class="pokemonDialogNavButton" onclick="showPreviousPokemon()">
       ←
     </button>
   `;
@@ -423,7 +423,7 @@ function createPreviousButton(id) {
  */
 function createNextButton(id) {
   return `
-    <button class="pokemonDialogNavButton" onclick="openPokemonDetails(${id + 1})">
+    <button class="pokemonDialogNavButton" onclick="showNextPokemon()">
       →
     </button>
   `;

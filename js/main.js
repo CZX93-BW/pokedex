@@ -4,6 +4,8 @@ const pokemonBatchSize = 20;
 
 let allPokemon = [];
 let allPokemonNames = [];
+let currentPokemonList = [];
+let currentPokemonIndex = 0;
 
 let currentOffset = 0;
 let isLoadingMore = false;
@@ -107,16 +109,38 @@ async function loadMorePokemon() {
  * @returns {Promise<void>}
  */
 async function openPokemonDetails(pokemonId) {
+  const activeList = isSearchActive ? currentPokemonList : allPokemon;
+
+  const index = activeList.findIndex(pokemon => pokemon.id === pokemonId);
+
+  if (index === -1) {
+    return;
+  }
+
+  currentPokemonList = activeList;
+  currentPokemonIndex = index;
+
+  const pokemon = activeList[index];
+
+  // 👉 Falls bereits Detaildaten vorhanden → KEIN FETCH
+  if (pokemon.details) {
+    renderPokemonDetails(pokemon.details);
+    return;
+  }
+
   renderDialogLoadingState();
 
-  const pokemonDetails = await loadPokemonDetailsById(pokemonId);
+  const details = await loadPokemonDetailsById(pokemonId);
 
-  if (!pokemonDetails) {
+  if (!details) {
     renderDialogErrorState('Die Detaildaten konnten nicht geladen werden.');
     return;
   }
 
-  renderPokemonDetails(pokemonDetails);
+  // 👉 Cache speichern
+  pokemon.details = details;
+
+  renderPokemonDetails(details);
 }
 
 /* =========================
@@ -172,7 +196,7 @@ async function handlePokemonSearch(searchValue) {
   const detailedPokemonList = await loadDetailedPokemonList(limitedMatches);
   const pokemonCardDataList = createPokemonCardDataList(detailedPokemonList);
 
-  renderPokemonList(pokemonCardDataList);
+  renderPokemonList = pokemonCardDataList;
 }
 
 /**
@@ -180,11 +204,12 @@ async function handlePokemonSearch(searchValue) {
  */
 function resetSearchState() {
   isSearchActive = false;
+  currentPokemonList = allPokemon;
+
   clearPokemonStatus();
   renderPokemonList(allPokemon);
   updateLoadMoreVisibility();
 }
-
 /**
  * Returns all matching pokemon names for the search.
  *
@@ -228,6 +253,34 @@ function createPokemonCardData(pokemon) {
     },
     types: pokemon.types,
   };
+}
+
+/* =========================
+   Navigation Dialog
+   ========================= */
+
+/**
+ * Shows next pokemon in dialog.
+ */
+function showNextPokemon() {
+  if (currentPokemonIndex >= currentPokemonList.length - 1) {
+    return;
+  }
+
+  currentPokemonIndex++;
+  openPokemonDetails(currentPokemonList[currentPokemonIndex].id);
+}
+
+/**
+ * Shows previous pokemon in dialog.
+ */
+function showPreviousPokemon() {
+  if (currentPokemonIndex <= 0) {
+    return;
+  }
+
+  currentPokemonIndex--;
+  openPokemonDetails(currentPokemonList[currentPokemonIndex].id);
 }
 
 /* =========================
