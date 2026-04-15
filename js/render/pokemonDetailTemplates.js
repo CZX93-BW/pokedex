@@ -7,11 +7,11 @@
 function getPokemonDetailTemplate(pokemon) {
   return `
     <article class="pokemonDialogCard" onclick="stopDialogClose(event)">
+      ${pokemon.previousButton}
+      ${pokemon.nextButton}
+
       <div class="pokemonDialogHeader">
-        <div class="pokemonDialogNavigation">
-          ${pokemon.previousButton}
-          ${pokemon.nextButton}
-        </div>
+        <div class="pokemonDialogHeaderSpacer"></div>
 
         <button
           class="pokemonDialogCloseButton"
@@ -166,7 +166,7 @@ function getDialogLoadingTemplate() {
   return `
     <article class="pokemonDialogCard" onclick="stopDialogClose(event)">
       <div class="pokemonDialogHeader">
-        <div class="pokemonDialogNavigation"></div>
+        <div class="pokemonDialogHeaderSpacer"></div>
 
         <button
           class="pokemonDialogCloseButton"
@@ -196,7 +196,7 @@ function getDialogErrorTemplate(message) {
   return `
     <article class="pokemonDialogCard" onclick="stopDialogClose(event)">
       <div class="pokemonDialogHeader">
-        <div class="pokemonDialogNavigation"></div>
+        <div class="pokemonDialogHeaderSpacer"></div>
 
         <button
           class="pokemonDialogCloseButton"
