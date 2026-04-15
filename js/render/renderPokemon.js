@@ -66,9 +66,9 @@ function renderPokemonDetails(pokemonDetails) {
     return;
   }
 
-  const viewModel = createPokemonDetailViewModel(pokemonDetails);
+  window.currentPokemonDetails = createPokemonDetailViewModel(pokemonDetails);
 
-  pokemonDialog.innerHTML = getPokemonDetailTemplate(viewModel);
+  pokemonDialog.innerHTML = getPokemonDetailTemplate(window.currentPokemonDetails);
   pokemonDialogOverlay.classList.remove('hidden');
   setBodyScrollLock(true);
 }
