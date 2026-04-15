@@ -25,6 +25,7 @@ async function initializeApp() {
   loadFromLocalStorage();
 
   if (allPokemon.length > 0) {
+    currentPokemonList = allPokemon;
     renderPokemonList(allPokemon);
     updateLoadMoreVisibility();
   } else {
@@ -57,6 +58,7 @@ async function loadAndRenderPokemonList() {
   }
 
   allPokemon = pokemonCardDataList;
+  currentPokemonList = allPokemon;
   currentOffset += pokemonBatchSize;
 
   saveToLocalStorage();
@@ -91,6 +93,7 @@ async function loadMorePokemon() {
   }
 
   allPokemon = [...allPokemon, ...pokemonCardDataList];
+  currentPokemonList = allPokemon;
   currentOffset += pokemonBatchSize;
 
   saveToLocalStorage();
@@ -109,38 +112,56 @@ async function loadMorePokemon() {
  * @returns {Promise<void>}
  */
 async function openPokemonDetails(pokemonId) {
-  const activeList = isSearchActive ? currentPokemonList : allPokemon;
+  const activePokemonList = getActivePokemonList();
+  const pokemonIndex = findPokemonIndexById(activePokemonList, pokemonId);
 
-  const index = activeList.findIndex(pokemon => pokemon.id === pokemonId);
-
-  if (index === -1) {
+  if (pokemonIndex === -1) {
     return;
   }
 
-  currentPokemonList = activeList;
-  currentPokemonIndex = index;
+  currentPokemonList = activePokemonList;
+  currentPokemonIndex = pokemonIndex;
 
-  const pokemon = activeList[index];
+  const selectedPokemon = activePokemonList[pokemonIndex];
 
-  // 👉 Falls bereits Detaildaten vorhanden → KEIN FETCH
-  if (pokemon.details) {
-    renderPokemonDetails(pokemon.details);
+  if (selectedPokemon.details) {
+    renderPokemonDetails(selectedPokemon.details);
     return;
   }
 
   renderDialogLoadingState();
 
-  const details = await loadPokemonDetailsById(pokemonId);
+  const pokemonDetails = await loadPokemonDetailsById(pokemonId);
 
-  if (!details) {
+  if (!pokemonDetails) {
     renderDialogErrorState('Die Detaildaten konnten nicht geladen werden.');
     return;
   }
 
-  // 👉 Cache speichern
-  pokemon.details = details;
+  selectedPokemon.details = pokemonDetails;
+  renderPokemonDetails(pokemonDetails);
+}
 
-  renderPokemonDetails(details);
+/**
+ * Returns the currently active pokemon list.
+ *
+ * @returns {Array} The active pokemon list.
+ */
+function getActivePokemonList() {
+  return isSearchActive ? currentPokemonList : allPokemon;
+}
+
+/**
+ * Returns the index of a pokemon by id.
+ *
+ * @param {Array} pokemonList - The pokemon list to search in.
+ * @param {number} pokemonId - The pokemon id.
+ * @returns {number} The matching pokemon index.
+ */
+function findPokemonIndexById(pokemonList, pokemonId) {
+  return pokemonList.findIndex((pokemon) => {
+    return pokemon.id === pokemonId;
+  });
 }
 
 /* =========================
@@ -167,25 +188,78 @@ function handlePokemonSearchButtonClick() {
  * @returns {Promise<void>}
  */
 async function handlePokemonSearch(searchValue) {
-  const normalizedSearchValue = searchValue.trim().toLowerCase();
+  const normalizedSearchValue = normalizeSearchValue(searchValue);
 
-  // 👉 WICHTIG: Immer zuerst Suchmodus aktivieren + Button verstecken
-  isSearchActive = true;
-  hideLoadMoreButton();
+  activateSearchMode();
 
-  if (normalizedSearchValue === '') {
+  if (isSearchValueEmpty(normalizedSearchValue)) {
     resetSearchState();
     return;
   }
 
-  if (normalizedSearchValue.length < 3) {
-    renderErrorMessage('Bitte mindestens 3 Zeichen eingeben.');
+  if (!isSearchValueValid(normalizedSearchValue)) {
+    renderSearchValidationError();
     return;
   }
 
+  await performPokemonSearch(normalizedSearchValue);
+}
+
+/**
+ * Normalizes the search value.
+ *
+ * @param {string} searchValue - The raw search value.
+ * @returns {string} The normalized search value.
+ */
+function normalizeSearchValue(searchValue) {
+  return searchValue.trim().toLowerCase();
+}
+
+/**
+ * Activates the search mode.
+ */
+function activateSearchMode() {
+  isSearchActive = true;
+  hideLoadMoreButton();
+}
+
+/**
+ * Checks whether the search value is empty.
+ *
+ * @param {string} searchValue - The normalized search value.
+ * @returns {boolean} True if the value is empty.
+ */
+function isSearchValueEmpty(searchValue) {
+  return searchValue === '';
+}
+
+/**
+ * Checks whether the search value is valid.
+ *
+ * @param {string} searchValue - The normalized search value.
+ * @returns {boolean} True if the value is valid.
+ */
+function isSearchValueValid(searchValue) {
+  return searchValue.length >= 3;
+}
+
+/**
+ * Renders the validation error for short search inputs.
+ */
+function renderSearchValidationError() {
+  renderErrorMessage('Bitte mindestens 3 Zeichen eingeben.');
+}
+
+/**
+ * Performs the pokemon search and renders the results.
+ *
+ * @param {string} searchValue - The normalized search value.
+ * @returns {Promise<void>}
+ */
+async function performPokemonSearch(searchValue) {
   renderLoadingState();
 
-  const matchingPokemon = getMatchingPokemonNames(normalizedSearchValue);
+  const matchingPokemon = getMatchingPokemonNames(searchValue);
   const limitedMatches = matchingPokemon.slice(0, 20);
 
   if (limitedMatches.length === 0) {
@@ -196,7 +270,8 @@ async function handlePokemonSearch(searchValue) {
   const detailedPokemonList = await loadDetailedPokemonList(limitedMatches);
   const pokemonCardDataList = createPokemonCardDataList(detailedPokemonList);
 
-  renderPokemonList = pokemonCardDataList;
+  currentPokemonList = pokemonCardDataList;
+  renderPokemonList(pokemonCardDataList);
 }
 
 /**
@@ -210,6 +285,7 @@ function resetSearchState() {
   renderPokemonList(allPokemon);
   updateLoadMoreVisibility();
 }
+
 /**
  * Returns all matching pokemon names for the search.
  *
@@ -428,10 +504,6 @@ function handleEscapeKeyClose(event) {
 
   closePokemonDetails();
 }
-
-/**
- * Registers all application startup logic.
- */
 
 /**
  * Starts the application after the DOM is fully loaded.
