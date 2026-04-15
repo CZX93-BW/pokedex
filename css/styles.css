@@ -18,6 +18,7 @@
   --color-button-disabled: #cfcfcf;
   --color-badge-border: rgba(255, 255, 255, 0.55);
   --color-badge-shadow: rgba(0, 0, 0, 0.12);
+  --color-tab-hover: #f1f1f1;
 
   --type-normal: #a8a878;
   --type-fire: #f08030;
@@ -624,6 +625,41 @@ a {
   padding: 12px;
   background: var(--color-stat-background);
   border-radius: var(--radius);
+}
+
+/* =========================
+   Dialog Tabs
+   ========================= */
+
+.pokemonTabs {
+  display: flex;
+  gap: var(--spacing-s);
+}
+
+.pokemonTab {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+  color: var(--color-text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.pokemonTab:hover {
+  background: var(--color-tab-hover);
+}
+
+.pokemonTab:active {
+  transform: translateY(1px);
+}
+
+.pokemonTab.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-white);
 }
 
 /* =========================
