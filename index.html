@@ -29,6 +29,13 @@
           <button onclick="handlePokemonSearchButtonClick()" class="searchButton">
             Suchen
           </button>
+          <button
+            id="resetSearchButton"
+            onclick="handleSearchResetButtonClick()"
+            class="searchButton searchResetButton hidden"
+            type="button">
+            Zurücksetzen
+          </button>
         </div>
       </div>
     </div>
@@ -50,8 +57,9 @@
   </main>
 
   <footer class="pageFooter">
-    <div class="contentWrapper">
+    <div class="contentWrapper pageFooterContent">
       <p>Pokédex Projekt • © Bastian Wollny 2026</p>
+      <a class="footerLink" href="./impressum.html">Impressum</a>
     </div>
   </footer>
 

@@ -84,6 +84,11 @@ input {
   font: inherit;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 .hidden {
   display: none;
 }
@@ -134,12 +139,28 @@ input {
   padding: var(--spacing-m) 0;
   background: var(--color-primary);
   color: var(--color-white);
-  text-align: center;
   font-size: 14px;
 }
 
 .pageFooter p {
   margin: 0;
+}
+
+.pageFooterContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-m);
+}
+
+.footerLink {
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footerLink:hover {
+  opacity: 0.85;
 }
 
 /* =========================
@@ -182,6 +203,10 @@ input {
 
 .searchButton:active {
   transform: translateY(1px);
+}
+
+.searchResetButton {
+  background: #ffe3e3;
 }
 
 /* =========================
@@ -580,6 +605,39 @@ input {
 }
 
 /* =========================
+   Legal Pages
+   ========================= */
+
+.legalPage {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.legalCard {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: var(--spacing-xl);
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+.legalCard h2,
+.legalCard h3 {
+  margin-top: 0;
+}
+
+.legalCard p {
+  line-height: 1.6;
+}
+
+.legalBackLink {
+  display: inline-block;
+  margin-top: var(--spacing-l);
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+/* =========================
    Loader
    ========================= */
 
@@ -703,7 +761,8 @@ input {
   }
 
   .pokemonCard,
-  .pokemonDialogCard {
+  .pokemonDialogCard,
+  .legalCard {
     padding: var(--spacing-m);
   }
 
@@ -717,5 +776,10 @@ input {
 
   .pokemonStatus {
     margin-bottom: var(--spacing-m);
+  }
+
+  .pageFooterContent {
+    flex-direction: column;
+    text-align: center;
   }
 }

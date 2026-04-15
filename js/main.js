@@ -33,6 +33,7 @@ async function initializeApp() {
   }
 
   allPokemonNames = await loadAllPokemonNames();
+  updateSearchResetButtonVisibility();
 }
 
 /* =========================
@@ -182,6 +183,14 @@ function handlePokemonSearchButtonClick() {
 }
 
 /**
+ * Handles the reset search button click.
+ */
+function handleSearchResetButtonClick() {
+  resetSearchInputValue();
+  resetSearchState();
+}
+
+/**
  * Handles the pokemon search.
  *
  * @param {string} searchValue - The entered search value.
@@ -199,6 +208,7 @@ async function handlePokemonSearch(searchValue) {
 
   if (!isSearchValueValid(normalizedSearchValue)) {
     renderSearchValidationError();
+    updateSearchResetButtonVisibility();
     return;
   }
 
@@ -221,6 +231,7 @@ function normalizeSearchValue(searchValue) {
 function activateSearchMode() {
   isSearchActive = true;
   hideLoadMoreButton();
+  updateSearchResetButtonVisibility();
 }
 
 /**
@@ -264,6 +275,7 @@ async function performPokemonSearch(searchValue) {
 
   if (limitedMatches.length === 0) {
     renderNoSearchResults();
+    updateSearchResetButtonVisibility();
     return;
   }
 
@@ -272,6 +284,7 @@ async function performPokemonSearch(searchValue) {
 
   currentPokemonList = pokemonCardDataList;
   renderPokemonList(pokemonCardDataList);
+  updateSearchResetButtonVisibility();
 }
 
 /**
@@ -284,6 +297,58 @@ function resetSearchState() {
   clearPokemonStatus();
   renderPokemonList(allPokemon);
   updateLoadMoreVisibility();
+  updateSearchResetButtonVisibility();
+}
+
+/**
+ * Resets the search input value.
+ */
+function resetSearchInputValue() {
+  const pokemonSearchInput = getElementById('pokemonSearchInput');
+
+  if (!pokemonSearchInput) {
+    return;
+  }
+
+  pokemonSearchInput.value = '';
+}
+
+/**
+ * Updates the reset button visibility.
+ */
+function updateSearchResetButtonVisibility() {
+  if (isSearchActive) {
+    showSearchResetButton();
+    return;
+  }
+
+  hideSearchResetButton();
+}
+
+/**
+ * Shows the reset search button.
+ */
+function showSearchResetButton() {
+  const resetSearchButton = getElementById('resetSearchButton');
+
+  if (!resetSearchButton) {
+    return;
+  }
+
+  resetSearchButton.classList.remove('hidden');
+}
+
+/**
+ * Hides the reset search button.
+ */
+function hideSearchResetButton() {
+  const resetSearchButton = getElementById('resetSearchButton');
+
+  if (!resetSearchButton) {
+    return;
+  }
+
+  resetSearchButton.classList.add('hidden');
 }
 
 /**
