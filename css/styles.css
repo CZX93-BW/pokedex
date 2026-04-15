@@ -16,6 +16,8 @@
   --color-tag-background: #f0f0f0;
   --color-stat-background: #f7f7f7;
   --color-button-disabled: #cfcfcf;
+  --color-badge-border: rgba(255, 255, 255, 0.55);
+  --color-badge-shadow: rgba(0, 0, 0, 0.12);
 
   --type-normal: #a8a878;
   --type-fire: #f08030;
@@ -338,10 +340,13 @@ a {
   align-items: center;
   justify-content: center;
   padding: 6px 12px;
+  border: 2px solid var(--color-badge-border);
   border-radius: 999px;
+  box-shadow: 0 2px 6px var(--color-badge-shadow);
   font-size: 14px;
   font-weight: bold;
   color: var(--color-white);
+  background-clip: padding-box;
 }
 
 /* =========================
@@ -482,24 +487,41 @@ a {
 .pokemonDialog {
   width: min(100%, 420px);
   max-height: 100%;
-  overflow-y: auto;
 }
 
 .pokemonDialogCard {
   background: var(--color-white);
   border-radius: var(--radius);
+  box-shadow: 0 8px 24px var(--color-shadow);
+  display: flex;
+  flex-direction: column;
+  max-height: min(90vh, 720px);
+  overflow: hidden;
+}
+
+.pokemonDialogHeader {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-white);
+  padding: var(--spacing-m) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-m);
+}
+
+.pokemonDialogContent {
   padding: var(--spacing-xl);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-m);
-  position: relative;
-  box-shadow: 0 8px 24px var(--color-shadow);
+  overflow-y: auto;
 }
 
 .pokemonDialogCloseButton {
-  position: absolute;
-  top: 12px;
-  right: 12px;
+  flex-shrink: 0;
   border: none;
   background: transparent;
   font-size: 24px;
@@ -516,7 +538,7 @@ a {
   display: flex;
   justify-content: space-between;
   gap: var(--spacing-m);
-  margin-right: 36px;
+  width: 100%;
 }
 
 .pokemonDialogNavButton {
@@ -761,17 +783,24 @@ a {
   }
 
   .pokemonCard,
-  .pokemonDialogCard,
   .legalCard {
+    padding: var(--spacing-m);
+  }
+
+  .pokemonDialogCard {
+    max-height: min(92vh, 720px);
+  }
+
+  .pokemonDialogHeader {
+    padding: var(--spacing-m);
+  }
+
+  .pokemonDialogContent {
     padding: var(--spacing-m);
   }
 
   .pokemonDialogTitle {
     font-size: 24px;
-  }
-
-  .pokemonDialogNavigation {
-    margin-right: 28px;
   }
 
   .pokemonStatus {
