@@ -53,11 +53,6 @@ function renderPokemonListItems(viewModels, container) {
    Dialog Rendering
    ========================= */
 
-/**
- * Renders the pokemon detail dialog.
- *
- * @param {Object} pokemonDetails - The pokemon detail data.
- */
 function renderPokemonDetails(pokemonDetails) {
   const pokemonDialog = getElementById('pokemonDialog');
   const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
@@ -73,9 +68,6 @@ function renderPokemonDetails(pokemonDetails) {
   setBodyScrollLock(true);
 }
 
-/**
- * Renders dialog loading state.
- */
 function renderDialogLoadingState() {
   const pokemonDialog = getElementById('pokemonDialog');
   const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
@@ -89,11 +81,6 @@ function renderDialogLoadingState() {
   setBodyScrollLock(true);
 }
 
-/**
- * Renders dialog error state.
- *
- * @param {string} message - The error message.
- */
 function renderDialogErrorState(message) {
   const pokemonDialog = getElementById('pokemonDialog');
   const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
@@ -107,9 +94,6 @@ function renderDialogErrorState(message) {
   setBodyScrollLock(true);
 }
 
-/**
- * Closes the pokemon dialog.
- */
 function closePokemonDetails() {
   const pokemonDialog = getElementById('pokemonDialog');
   const pokemonDialogOverlay = getElementById('pokemonDialogOverlay');
@@ -123,190 +107,32 @@ function closePokemonDetails() {
   setBodyScrollLock(false);
 }
 
-/**
- * Prevents dialog close when clicking inside.
- *
- * @param {Event} event - The click event.
- */
 function stopDialogClose(event) {
   event.stopPropagation();
 }
 
-/**
- * Toggles body scroll lock.
- *
- * @param {boolean} isLocked - The lock state.
- */
 function setBodyScrollLock(isLocked) {
   document.body.classList.toggle('dialogOpen', isLocked);
 }
 
 /* =========================
-   Status Rendering
+   Helpers
    ========================= */
 
-/**
- * Renders loading state.
- */
-function renderLoadingState() {
-  const status = getElementById('pokemonStatus');
-
-  if (!status) {
-    return;
-  }
-
-  clearPokemonList();
-  status.innerHTML = getLoadingTemplate();
-}
-
-/**
- * Renders error message.
- *
- * @param {string} message - The error message.
- */
-function renderErrorMessage(message) {
-  const status = getElementById('pokemonStatus');
-
-  if (!status) {
-    return;
-  }
-
-  clearPokemonList();
-  status.innerHTML = getErrorTemplate(message);
-}
-
-/**
- * Renders no search results state.
- */
-function renderNoSearchResults() {
-  const status = getElementById('pokemonStatus');
-
-  if (!status) {
-    return;
-  }
-
-  clearPokemonList();
-  status.innerHTML = getNoSearchResultsTemplate();
-}
-
-/* =========================
-   Load More Rendering
-   ========================= */
-
-/**
- * Shows loading spinner for load more.
- */
-function showLoadMoreLoading() {
-  const wrapper = getElementById('loadMoreWrapper');
-
-  if (!wrapper) {
-    return;
-  }
-
-  wrapper.innerHTML = getLoadMoreLoadingTemplate();
-  wrapper.classList.remove('hidden');
-}
-
-/**
- * Restores load more button.
- */
-function hideLoadMoreLoading() {
-  const wrapper = getElementById('loadMoreWrapper');
-
-  if (!wrapper) {
-    return;
-  }
-
-  wrapper.innerHTML = `
-    <button onclick="loadMorePokemon()" class="loadMoreButton">
-      Mehr laden
-    </button>
-  `;
-}
-
-/**
- * Shows load more button.
- */
-function showLoadMoreButton() {
-  const wrapper = getElementById('loadMoreWrapper');
-
-  if (!wrapper) {
-    return;
-  }
-
-  wrapper.classList.remove('hidden');
-}
-
-/**
- * Hides load more button.
- */
-function hideLoadMoreButton() {
-  const wrapper = getElementById('loadMoreWrapper');
-
-  if (!wrapper) {
-    return;
-  }
-
-  wrapper.classList.add('hidden');
-}
-
-/**
- * Updates load more visibility.
- */
-function updateLoadMoreVisibility() {
-  if (isSearchActive) {
-    hideLoadMoreButton();
-    return;
-  }
-
-  if (hasLoadedAllPokemon()) {
-    hideLoadMoreButton();
-    return;
-  }
-
-  showLoadMoreButton();
-}
-
-/* =========================
-   Clearing Helpers
-   ========================= */
-
-/**
- * Clears pokemon list.
- */
 function clearPokemonList() {
   const container = getElementById('pokemonList');
-
-  if (!container) {
-    return;
-  }
-
-  container.innerHTML = '';
+  if (container) container.innerHTML = '';
 }
 
-/**
- * Clears pokemon status.
- */
 function clearPokemonStatus() {
   const status = getElementById('pokemonStatus');
-
-  if (!status) {
-    return;
-  }
-
-  status.innerHTML = '';
+  if (status) status.innerHTML = '';
 }
 
 /* =========================
    View Models
    ========================= */
 
-/**
- * Creates view model for pokemon card.
- *
- * @param {Object} pokemon - The pokemon data object.
- * @returns {Object} The prepared pokemon card view model.
- */
 function createPokemonCardViewModel(pokemon) {
   const mainType = pokemon.types[0].type.name;
 
@@ -319,12 +145,6 @@ function createPokemonCardViewModel(pokemon) {
   };
 }
 
-/**
- * Creates view model for pokemon detail dialog.
- *
- * @param {Object} pokemon - The pokemon detail object.
- * @returns {Object} The prepared pokemon detail view model.
- */
 function createPokemonDetailViewModel(pokemon) {
   return {
     id: pokemon.id,
@@ -341,15 +161,53 @@ function createPokemonDetailViewModel(pokemon) {
 }
 
 /* =========================
+   Navigation Buttons FIXED
+   ========================= */
+
+function createPreviousButton() {
+  if (isFirstPokemonInCurrentList()) {
+    return `
+      <button class="pokemonDialogNavButton navLeft disabled" disabled>
+        ←
+      </button>
+    `;
+  }
+
+  return `
+    <button class="pokemonDialogNavButton navLeft" onclick="showPreviousPokemon()">
+      ←
+    </button>
+  `;
+}
+
+function createNextButton() {
+  if (isLastPokemonInCurrentList()) {
+    return `
+      <button class="pokemonDialogNavButton navRight disabled" disabled>
+        →
+      </button>
+    `;
+  }
+
+  return `
+    <button class="pokemonDialogNavButton navRight" onclick="showNextPokemon()">
+      →
+    </button>
+  `;
+}
+
+function isFirstPokemonInCurrentList() {
+  return currentPokemonIndex <= 0;
+}
+
+function isLastPokemonInCurrentList() {
+  return currentPokemonIndex >= currentPokemonList.length - 1;
+}
+
+/* =========================
    HTML Generators
    ========================= */
 
-/**
- * Creates the html string for pokemon type badges.
- *
- * @param {Array} types - The pokemon types.
- * @returns {string} The prepared html string.
- */
 function createTypesHtml(types) {
   return types.map((type) => {
     return `
@@ -360,12 +218,6 @@ function createTypesHtml(types) {
   }).join('');
 }
 
-/**
- * Creates the html string for pokemon abilities.
- *
- * @param {Array} abilities - The pokemon abilities.
- * @returns {string} The prepared html string.
- */
 function createAbilitiesHtml(abilities) {
   return abilities.map((entry) => {
     return `
@@ -376,12 +228,6 @@ function createAbilitiesHtml(abilities) {
   }).join('');
 }
 
-/**
- * Creates the html string for pokemon stats.
- *
- * @param {Array} stats - The pokemon stats.
- * @returns {string} The prepared html string.
- */
 function createStatsHtml(stats) {
   return stats.map((stat) => {
     return `
@@ -391,64 +237,4 @@ function createStatsHtml(stats) {
       </div>
     `;
   }).join('');
-}
-
-/**
- * Creates the previous navigation button html.
- *
- * @returns {string} The prepared html string.
- */
-function createPreviousButton() {
-  if (isFirstPokemonInCurrentList()) {
-    return `
-      <button class="pokemonDialogNavButton disabled" disabled>
-        ←
-      </button>
-    `;
-  }
-
-  return `
-    <button class="pokemonDialogNavButton" onclick="showPreviousPokemon()">
-      ←
-    </button>
-  `;
-}
-
-/**
- * Creates the next navigation button html.
- *
- * @returns {string} The prepared html string.
- */
-function createNextButton() {
-  if (isLastPokemonInCurrentList()) {
-    return `
-      <button class="pokemonDialogNavButton disabled" disabled>
-        →
-      </button>
-    `;
-  }
-
-  return `
-    <button class="pokemonDialogNavButton" onclick="showNextPokemon()">
-      →
-    </button>
-  `;
-}
-
-/**
- * Checks whether the current pokemon is the first one in the active list.
- *
- * @returns {boolean} True if the current pokemon is the first one.
- */
-function isFirstPokemonInCurrentList() {
-  return currentPokemonIndex <= 0;
-}
-
-/**
- * Checks whether the current pokemon is the last one in the active list.
- *
- * @returns {boolean} True if the current pokemon is the last one.
- */
-function isLastPokemonInCurrentList() {
-  return currentPokemonIndex >= currentPokemonList.length - 1;
 }
