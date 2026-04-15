@@ -335,8 +335,8 @@ function createPokemonDetailViewModel(pokemon) {
     weight: formatPokemonWeight(pokemon.weight),
     abilitiesHtml: createAbilitiesHtml(pokemon.abilities),
     statsHtml: createStatsHtml(pokemon.stats),
-    previousButton: createPreviousButton(pokemon.id),
-    nextButton: createNextButton(pokemon.id),
+    previousButton: createPreviousButton(),
+    nextButton: createNextButton(),
   };
 }
 
@@ -396,11 +396,10 @@ function createStatsHtml(stats) {
 /**
  * Creates the previous navigation button html.
  *
- * @param {number} id - The current pokemon id.
  * @returns {string} The prepared html string.
  */
-function createPreviousButton(id) {
-  if (id <= 1) {
+function createPreviousButton() {
+  if (isFirstPokemonInCurrentList()) {
     return `
       <button class="pokemonDialogNavButton disabled" disabled>
         ←
@@ -418,13 +417,38 @@ function createPreviousButton(id) {
 /**
  * Creates the next navigation button html.
  *
- * @param {number} id - The current pokemon id.
  * @returns {string} The prepared html string.
  */
-function createNextButton(id) {
+function createNextButton() {
+  if (isLastPokemonInCurrentList()) {
+    return `
+      <button class="pokemonDialogNavButton disabled" disabled>
+        →
+      </button>
+    `;
+  }
+
   return `
     <button class="pokemonDialogNavButton" onclick="showNextPokemon()">
       →
     </button>
   `;
+}
+
+/**
+ * Checks whether the current pokemon is the first one in the active list.
+ *
+ * @returns {boolean} True if the current pokemon is the first one.
+ */
+function isFirstPokemonInCurrentList() {
+  return currentPokemonIndex <= 0;
+}
+
+/**
+ * Checks whether the current pokemon is the last one in the active list.
+ *
+ * @returns {boolean} True if the current pokemon is the last one.
+ */
+function isLastPokemonInCurrentList() {
+  return currentPokemonIndex >= currentPokemonList.length - 1;
 }
