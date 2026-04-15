@@ -499,7 +499,7 @@ a {
   display: flex;
   flex-direction: column;
   max-height: min(90vh, 720px);
-  overflow: hidden;
+  overflow: visible;
   position: relative;
 }
 
@@ -514,6 +514,8 @@ a {
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-m);
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
 }
 
 .pokemonDialogHeaderSpacer {
@@ -527,6 +529,9 @@ a {
   flex-direction: column;
   gap: var(--spacing-m);
   overflow-y: auto;
+  background: var(--color-white);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
 }
 
 .pokemonDialogCloseButton {
@@ -544,17 +549,9 @@ a {
   transform: scale(1.06);
 }
 
-.pokemonDialogNavigation {
-  display: flex;
-  justify-content: space-between;
-  gap: var(--spacing-m);
-  width: 100%;
-}
-
 .pokemonDialogNavButton {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
   z-index: 5;
   width: 48px;
   height: 48px;
@@ -572,15 +569,6 @@ a {
   transition: opacity 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.pokemonDialogNavButton:hover {
-  opacity: 0.96;
-  box-shadow: 0 8px 18px var(--color-floating-button-shadow);
-}
-
-.pokemonDialogNavButton:active {
-  transform: translateY(-50%) scale(0.96);
-}
-
 .pokemonDialogNavButton.disabled {
   background: var(--color-button-disabled);
   cursor: not-allowed;
@@ -589,15 +577,36 @@ a {
 
 .pokemonDialogNavButton.disabled:hover {
   opacity: 1;
-  transform: translateY(-50%);
 }
 
 .pokemonDialogNavButton.navLeft {
-  left: -24px;
+  left: 0;
+  transform: translate(-50%, -50%);
 }
 
 .pokemonDialogNavButton.navRight {
-  right: -24px;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.pokemonDialogNavButton.navLeft:hover:not(.disabled) {
+  transform: translate(-50%, -50%) scale(1.1);
+  opacity: 0.96;
+  box-shadow: 0 8px 18px var(--color-floating-button-shadow);
+}
+
+.pokemonDialogNavButton.navRight:hover:not(.disabled) {
+  transform: translate(50%, -50%) scale(1.1);
+  opacity: 0.96;
+  box-shadow: 0 8px 18px var(--color-floating-button-shadow);
+}
+
+.pokemonDialogNavButton.navLeft:active:not(.disabled) {
+  transform: translate(-50%, -50%) scale(0.96);
+}
+
+.pokemonDialogNavButton.navRight:active:not(.disabled) {
+  transform: translate(50%, -50%) scale(0.96);
 }
 
 .pokemonDialogId {
@@ -889,22 +898,28 @@ a {
 
 @media (max-width: 480px) {
   .pokemonDialogNavButton.navLeft {
-    left: -12px;
+    left: 6px;
+    transform: translate(-35%, -50%);
   }
 
   .pokemonDialogNavButton.navRight {
-    right: -12px;
+    right: 6px;
+    transform: translate(35%, -50%);
   }
-}
 
-/* =========================
-   Floating Button Animation
-   ========================= */
+  .pokemonDialogNavButton.navLeft:hover:not(.disabled) {
+    transform: translate(-35%, -50%) scale(1.08);
+  }
 
-.pokemonDialogNavButton.navLeft:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-}
+  .pokemonDialogNavButton.navRight:hover:not(.disabled) {
+    transform: translate(35%, -50%) scale(1.08);
+  }
 
-.pokemonDialogNavButton.navRight:hover {
-  transform: translate(50%, -50%) scale(1.1);
+  .pokemonDialogNavButton.navLeft:active:not(.disabled) {
+    transform: translate(-35%, -50%) scale(0.96);
+  }
+
+  .pokemonDialogNavButton.navRight:active:not(.disabled) {
+    transform: translate(35%, -50%) scale(0.96);
+  }
 }
