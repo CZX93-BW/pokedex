@@ -79,7 +79,7 @@ function getLoadMoreLoadingTemplate() {
   return `
     <div class="loadMoreLoading">
       <div class="pokeballLoader"></div>
-      <p>Loading...</p>
+      <p>Lade weitere Pokémon...</p>
     </div>
   `;
 }

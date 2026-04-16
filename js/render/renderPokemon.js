@@ -116,7 +116,58 @@ function setBodyScrollLock(isLocked) {
 }
 
 /* =========================
-   Helpers
+   Load More Rendering
+   ========================= */
+
+function showLoadMoreLoading() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (!wrapper) return;
+
+  wrapper.innerHTML = getLoadMoreLoadingTemplate();
+  wrapper.classList.remove('hidden');
+}
+
+function hideLoadMoreLoading() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (!wrapper) return;
+
+  wrapper.innerHTML = `
+    <button onclick="loadMorePokemon()" class="loadMoreButton">
+      Mehr laden
+    </button>
+  `;
+}
+
+function showLoadMoreButton() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (!wrapper) return;
+
+  wrapper.classList.remove('hidden');
+}
+
+function hideLoadMoreButton() {
+  const wrapper = getElementById('loadMoreWrapper');
+  if (!wrapper) return;
+
+  wrapper.classList.add('hidden');
+}
+
+function updateLoadMoreVisibility() {
+  if (isSearchActive) {
+    hideLoadMoreButton();
+    return;
+  }
+
+  if (hasLoadedAllPokemon()) {
+    hideLoadMoreButton();
+    return;
+  }
+
+  showLoadMoreButton();
+}
+
+/* =========================
+   Clearing Helpers
    ========================= */
 
 function clearPokemonList() {
@@ -161,11 +212,11 @@ function createPokemonDetailViewModel(pokemon) {
 }
 
 /* =========================
-   Navigation Buttons FIXED
+   Navigation Buttons
    ========================= */
 
 function createPreviousButton() {
-  if (isFirstPokemonInCurrentList()) {
+  if (currentPokemonIndex <= 0) {
     return `
       <button class="pokemonDialogNavButton navLeft disabled" disabled>
         ←
@@ -181,7 +232,7 @@ function createPreviousButton() {
 }
 
 function createNextButton() {
-  if (isLastPokemonInCurrentList()) {
+  if (currentPokemonIndex >= currentPokemonList.length - 1) {
     return `
       <button class="pokemonDialogNavButton navRight disabled" disabled>
         →
@@ -194,14 +245,6 @@ function createNextButton() {
       →
     </button>
   `;
-}
-
-function isFirstPokemonInCurrentList() {
-  return currentPokemonIndex <= 0;
-}
-
-function isLastPokemonInCurrentList() {
-  return currentPokemonIndex >= currentPokemonList.length - 1;
 }
 
 /* =========================
