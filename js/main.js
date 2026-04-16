@@ -49,22 +49,15 @@ async function loadAndRenderPokemonList() {
   renderLoadingState();
   hideLoadMoreButton();
 
-  const pokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
-  const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
-  const pokemonCardDataList = createPokemonCardDataList(detailedPokemonList);
+  const pokemonCardDataList = await fetchPokemonCardDataBatch();
 
-  if (pokemonCardDataList.length === 0) {
+  if (!hasValidPokemonData(pokemonCardDataList)) {
     renderErrorMessage('Die Pokémon konnten nicht geladen werden.');
     return;
   }
 
-  allPokemon = pokemonCardDataList;
-  currentPokemonList = allPokemon;
-  currentOffset += pokemonBatchSize;
-
-  saveToLocalStorage();
-  renderPokemonList(allPokemon);
-  updateLoadMoreVisibility();
+  updatePokemonState(pokemonCardDataList);
+  finalizeInitialRender();
 }
 
 /**
@@ -73,37 +66,22 @@ async function loadAndRenderPokemonList() {
  * @returns {Promise<void>}
  */
 async function loadMorePokemon() {
-  if (isLoadingMore || hasLoadedAllPokemon() || isSearchActive) {
+  if (!canLoadMorePokemon()) {
     return;
   }
 
-  isLoadingMore = true;
-  showLoadMoreLoading();
-
+  startLoadMore();
   await delay(600);
 
-  const pokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
-  const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
-  const pokemonCardDataList = createPokemonCardDataList(detailedPokemonList);
+  const pokemonCardDataList = await fetchPokemonCardDataBatch();
 
-  if (pokemonCardDataList.length === 0) {
-    hideLoadMoreLoading();
-    updateLoadMoreVisibility();
-    isLoadingMore = false;
+  if (!hasValidPokemonData(pokemonCardDataList)) {
+    handleEmptyLoadMore();
     return;
   }
 
-  allPokemon = [...allPokemon, ...pokemonCardDataList];
-  currentPokemonList = allPokemon;
-  currentOffset += pokemonBatchSize;
-
-  saveToLocalStorage();
-  appendPokemonList(pokemonCardDataList);
-
-  hideLoadMoreLoading();
-  updateLoadMoreVisibility();
-
-  isLoadingMore = false;
+  appendPokemonState(pokemonCardDataList);
+  finalizeLoadMore(pokemonCardDataList);
 }
 
 /**
@@ -113,26 +91,161 @@ async function loadMorePokemon() {
  * @returns {Promise<void>}
  */
 async function openPokemonDetails(pokemonId) {
-  const activePokemonList = getActivePokemonList();
-  const pokemonIndex = findPokemonIndexById(activePokemonList, pokemonId);
+  const selectedPokemon = getSelectedPokemon(pokemonId);
 
-  if (pokemonIndex === -1) {
+  if (!selectedPokemon) {
     return;
   }
-
-  currentPokemonList = activePokemonList;
-  currentPokemonIndex = pokemonIndex;
-
-  const selectedPokemon = activePokemonList[pokemonIndex];
 
   if (selectedPokemon.details) {
     renderPokemonDetails(selectedPokemon.details);
     return;
   }
 
+  await loadAndRenderPokemonDetails(selectedPokemon);
+}
+
+/* =========================
+   Data Fetching Helpers
+   ========================= */
+
+/**
+ * Fetches and maps a pokemon batch to card data.
+ *
+ * @returns {Promise<Array>}
+ */
+async function fetchPokemonCardDataBatch() {
+  const pokemonList = await loadPokemonList(pokemonBatchSize, currentOffset);
+  const detailedPokemonList = await loadDetailedPokemonList(pokemonList);
+  return createPokemonCardDataList(detailedPokemonList);
+}
+
+/**
+ * Checks if pokemon data is valid.
+ *
+ * @param {Array} pokemonDataList - The pokemon data list.
+ * @returns {boolean}
+ */
+function hasValidPokemonData(pokemonDataList) {
+  return pokemonDataList.length > 0;
+}
+
+/* =========================
+   State Management
+   ========================= */
+
+/**
+ * Updates the pokemon state after initial loading.
+ *
+ * @param {Array} pokemonCardDataList - The mapped pokemon card data.
+ */
+function updatePokemonState(pokemonCardDataList) {
+  allPokemon = pokemonCardDataList;
+  currentPokemonList = allPokemon;
+  currentOffset += pokemonBatchSize;
+}
+
+/**
+ * Appends new pokemon to the current state.
+ *
+ * @param {Array} pokemonCardDataList - The mapped pokemon card data.
+ */
+function appendPokemonState(pokemonCardDataList) {
+  allPokemon = [...allPokemon, ...pokemonCardDataList];
+  currentPokemonList = allPokemon;
+  currentOffset += pokemonBatchSize;
+}
+
+/* =========================
+   Render Finalization
+   ========================= */
+
+/**
+ * Finalizes the initial render process.
+ */
+function finalizeInitialRender() {
+  saveToLocalStorage();
+  renderPokemonList(allPokemon);
+  updateLoadMoreVisibility();
+}
+
+/**
+ * Finalizes the load more render process.
+ *
+ * @param {Array} pokemonCardDataList - The appended pokemon card data.
+ */
+function finalizeLoadMore(pokemonCardDataList) {
+  saveToLocalStorage();
+  appendPokemonList(pokemonCardDataList);
+  hideLoadMoreLoading();
+  updateLoadMoreVisibility();
+  isLoadingMore = false;
+}
+
+/**
+ * Handles an empty load more result.
+ */
+function handleEmptyLoadMore() {
+  hideLoadMoreLoading();
+  updateLoadMoreVisibility();
+  isLoadingMore = false;
+}
+
+/* =========================
+   Load More State
+   ========================= */
+
+/**
+ * Checks whether more pokemon can be loaded.
+ *
+ * @returns {boolean}
+ */
+function canLoadMorePokemon() {
+  return !isLoadingMore && !hasLoadedAllPokemon() && !isSearchActive;
+}
+
+/**
+ * Starts the load more process.
+ */
+function startLoadMore() {
+  isLoadingMore = true;
+  showLoadMoreLoading();
+}
+
+/* =========================
+   Detail Helpers
+   ========================= */
+
+/**
+ * Returns the selected pokemon from the active list.
+ *
+ * @param {number} pokemonId - The pokemon id.
+ * @returns {Object | null}
+ */
+function getSelectedPokemon(pokemonId) {
+  const activePokemonList = getActivePokemonList();
+  const pokemonIndex = findPokemonIndexById(activePokemonList, pokemonId);
+
+  if (pokemonIndex === -1) {
+    return null;
+  }
+
+  currentPokemonList = activePokemonList;
+  currentPokemonIndex = pokemonIndex;
+
+  return activePokemonList[pokemonIndex];
+}
+
+/**
+ * Loads and renders pokemon details.
+ *
+ * @param {Object} selectedPokemon - The selected pokemon.
+ * @returns {Promise<void>}
+ */
+async function loadAndRenderPokemonDetails(selectedPokemon) {
   renderDialogLoadingState();
 
-  const pokemonDetails = await loadPokemonDetailsById(pokemonId);
+  const pokemonDetails = await loadPokemonDetailsById(selectedPokemon.id);
 
   if (!pokemonDetails) {
     renderDialogErrorState('Die Detaildaten konnten nicht geladen werden.');
