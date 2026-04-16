@@ -11,15 +11,18 @@ Der Fokus liegt auf einer sauberen technischen Umsetzung, klarer Struktur und ei
 
 - Anzeige einer Pokémon-Liste
 - Nachladen weiterer Pokémon über „Load More“ (Pagination)
-- Detailansicht für einzelne Pokémon
+- Detailansicht für einzelne Pokémon (Modal)
 - Navigation zwischen Pokémon innerhalb der Detailansicht
+- **Tab-Navigation im Detaildialog (Allgemein / Status)**
+- **Floating Navigation Buttons (links/rechts außerhalb der Card)**
 - Suchfunktion:
   - Suche ab mindestens 3 Zeichen
   - globale Suche über alle verfügbaren Pokémon
+  - Reset der Suche möglich
 - Ladezustände (Loading Spinner und visuelles Feedback)
 - Fehlerbehandlung bei API-Anfragen
 - Speicherung bereits geladener Daten im LocalStorage
-- responsives Layout
+- responsives Layout (Mobile-Optimierung)
 - Keyboard-Navigation (Accessibility)
 
 ---
@@ -27,7 +30,7 @@ Der Fokus liegt auf einer sauberen technischen Umsetzung, klarer Struktur und ei
 ## Technologien
 
 - HTML
-- CSS
+- CSS (Flexbox, Grid)
 - Vanilla JavaScript
 - PokéAPI (https://pokeapi.co/)
 
@@ -39,22 +42,21 @@ project-root/
 │
 ├── index.html
 ├── css/
-│   └── styles.css
+│ └── styles.css
 │
 ├── js/
-│   ├── main.js
-│   ├── api/
-│   │   └── fetchPokemon.js
-│   ├── render/
-│   │   ├── renderPokemon.js
-│   │   ├── pokemonTemplates.js
-│   │   └── pokemonDetailTemplates.js
-│   └── utils/
-│       └── helpers.js
+│ ├── main.js
+│ ├── api/
+│ │ └── fetchPokemon.js
+│ ├── render/
+│ │ ├── renderPokemon.js
+│ │ ├── pokemonTemplates.js
+│ │ └── pokemonDetailTemplates.js
+│ └── utils/
+│ └── helpers.js
 │
 └── assets/
-    └── favicon.svg
-
+└── favicon.svg
 
 
 ---
@@ -80,7 +82,7 @@ Die Anwendung ist modular aufgebaut:
 
 Besonderer Fokus lag auf:
 
-- kleinen, wartbaren Funktionen
+- kleinen, wartbaren Funktionen (Single Responsibility)
 - klarer Trennung von Logik und Darstellung
 - nachvollziehbarer und strukturierter Codeorganisation
 - Verwendung von JSDoc zur Dokumentation
@@ -93,6 +95,7 @@ Besonderer Fokus lag auf:
 - Detaildaten werden parallel mit `Promise.all` abgerufen
 - bereits geladene Daten werden im LocalStorage gespeichert
 - unnötige API-Anfragen werden dadurch reduziert
+- Detaildaten werden zusätzlich im laufenden Zustand gecached
 
 ---
 
@@ -116,8 +119,9 @@ Start über einen lokalen Server, z. B.:
 ## Besonderheiten
 
 - globale Suche über alle Pokémon (nicht nur geladene)
+- Dialog mit Tab-Navigation zur besseren Übersicht
+- Floating Navigation Buttons für bessere UX
 - visuelle Ladezustände (inkl. Loader)
-- saubere Trennung von Rendering und Logik
 - Vermeidung unnötiger Re-Renders
 - strukturierter und nachvollziehbarer Code
 
@@ -129,11 +133,11 @@ Start über einen lokalen Server, z. B.:
 - Animationen und visuelle Effekte
 - zusätzliche Filtermöglichkeiten (z. B. nach Typ)
 - erweiterte Detailinformationen
-- Aria und WCAG Umformung
+- vollständige ARIA- und WCAG-Optimierung
 
 ---
 
 ## Autor
 
 Bastian Wollny  
-Weiterbildungsprojekt 
+Weiterbildungsprojekt

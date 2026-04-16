@@ -143,6 +143,64 @@ Projekt fertigstellen, Fehler beheben und eine saubere, abgabereife Version hers
 
 ---
 
+## Tag 5 – Review und Feedbackanalyse
+
+### Ziel
+Erhaltenes Feedback analysieren und konkrete Verbesserungsmaßnahmen ableiten.
+
+### Aufgaben
+- Feedback des Dozenten vollständig durchgehen
+- funktionale Kritikpunkte identifizieren
+- UX- und Designhinweise bewerten
+- technische Verbesserungsvorschläge prüfen
+- priorisierte Liste von Änderungen erstellen
+- notwendige Refactorings planen
+
+### Ergebnis des Tages
+- klare Liste an Verbesserungen vorhanden
+- nächste Umsetzungsschritte definiert
+
+---
+
+## Tag 6 – Umsetzung der Verbesserungen
+
+### Ziel
+Alle relevanten Feedbackpunkte technisch und visuell umsetzen.
+
+### Aufgaben
+- Optimierung der Detailansicht (z. B. Tabs)
+- Verbesserung der Navigation im Dialog
+- Anpassung von UX-Elementen (z. B. Button-Positionen)
+- Fehlerbehebung und Performance-Optimierungen
+- Codequalität weiter verbessern (Refactoring)
+- unnötige API-Calls vermeiden
+
+### Ergebnis des Tages
+- Feedback ist größtenteils umgesetzt
+- Anwendung wirkt deutlich ausgereifter
+
+---
+
+## Tag 7 – Finalisierung und Wiederabgabe
+
+### Ziel
+Projekt erneut prüfen und final abgabefertig machen.
+
+### Aufgaben
+- vollständigen Funktionstest durchführen
+- UI und UX final überprüfen
+- letzte kleinere Anpassungen vornehmen
+- Codequalität final prüfen
+- README ggf. aktualisieren
+- finale Version committen und bereitstellen
+
+### Ergebnis des Tages
+- überarbeitete Version ist stabil und optimiert
+- Projekt entspricht vollständig den Anforderungen
+- Wiederabgabe ist vorbereitet
+
+---
+
 # Prioritätenübersicht
 
 ## Muss-Ziele
