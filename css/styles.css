@@ -10,6 +10,7 @@
   --color-text: #222222;
   --color-white: #ffffff;
   --color-border: #dddddd;
+  --color-border-strong: rgba(0, 0, 0, 0.12);
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-overlay: rgba(0, 0, 0, 0.5);
 
@@ -922,4 +923,67 @@ a {
   .pokemonDialogNavButton.navRight:active:not(.disabled) {
     transform: translate(35%, -50%) scale(0.96);
   }
+}
+
+/* =========================
+   Dialog Visual Enhancements
+   ========================= */
+
+/* Trennlinie Header */
+.pokemonDialogHeader {
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+/* Bild + Name Block */
+.pokemonDialogImageWrapper {
+  border: 1px solid var(--color-border-strong);
+  box-shadow: 0 2px 6px var(--color-shadow);
+}
+
+/* Allgemeine Infos */
+.pokemonDialogInfo {
+  border: 1px solid var(--color-border-strong);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+}
+
+/* Fähigkeiten Container */
+.pokemonDialogTagList {
+  border: 1px solid var(--color-border-strong);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+}
+
+/* Einzelne Fähigkeit */
+.pokemonDialogTag {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-white);
+}
+
+/* Stats Container */
+.pokemonStatsList {
+  border: 1px solid var(--color-border-strong);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
+}
+
+/* Einzelne Stat-Zeile */
+.pokemonStatItem {
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-white);
+}
+
+/* Tabs leicht abheben */
+.pokemonTabs {
+  border-bottom: 1px solid var(--color-border-strong);
+  padding-bottom: var(--spacing-s);
+}
+
+.pokemonDialogInfo,
+.pokemonDialogTagList,
+.pokemonStatsList {
+  box-shadow: 0 2px 6px var(--color-shadow);
 }
