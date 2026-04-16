@@ -10,7 +10,7 @@
   --color-text: #222222;
   --color-white: #ffffff;
   --color-border: #dddddd;
-  --color-border-strong: rgba(0, 0, 0, 0.12);
+  --color-border-strong: #0e11165b;
   --color-shadow: rgba(0, 0, 0, 0.08);
   --color-overlay: rgba(0, 0, 0, 0.5);
 
@@ -176,6 +176,7 @@ a {
   display: flex;
   gap: var(--spacing-s);
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .searchInput {
@@ -214,16 +215,25 @@ a {
   background: #ffe3e3;
 }
 
+.searchResetButton.hidden {
+  display: inline-flex;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 /* =========================
    Status
    ========================= */
 
 .pokemonStatus {
-  min-height: 40px;
+  min-height: 100px;
   margin-bottom: var(--spacing-l);
+  display: flex;
+  align-items: stretch;
 }
 
 .statusCard {
+  width: 100%;
   text-align: center;
   padding: var(--spacing-l);
   background: var(--color-white);
@@ -296,6 +306,7 @@ a {
 .pokemonCardTitle {
   margin: 0;
   font-size: 22px;
+  min-height: 28px;
 }
 
 /* =========================
@@ -318,14 +329,20 @@ a {
 
 .pokemonDialogImageWrapper {
   min-height: 180px;
+  border: 1px solid var(--color-border-strong);
+  box-shadow: 0 2px 6px var(--color-shadow);
 }
 
 .pokemonCardImageWrapper img {
-  max-width: 100px;
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
 }
 
 .pokemonDialogImageWrapper img {
-  max-width: 180px;
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
 }
 
 /* =========================
@@ -510,7 +527,7 @@ a {
   z-index: 2;
   background: var(--color-white);
   padding: var(--spacing-m) var(--spacing-xl);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border-strong);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -619,12 +636,14 @@ a {
 .pokemonDialogTitle {
   margin: 0;
   font-size: 28px;
+  min-height: 34px;
 }
 
 .pokemonDialogInfo {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-s);
+  border: 1px solid var(--color-border-strong);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
 }
 
 .pokemonDialogInfo p {
@@ -646,6 +665,10 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-s);
+  border: 1px solid var(--color-border-strong);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
 }
 
 .pokemonDialogTag {
@@ -653,7 +676,8 @@ a {
   align-items: center;
   justify-content: center;
   padding: 6px 12px;
-  background: var(--color-tag-background);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-white);
   border-radius: 999px;
   font-size: 14px;
   font-weight: bold;
@@ -663,6 +687,10 @@ a {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-s);
+  border: 1px solid var(--color-border-strong);
+  padding: var(--spacing-m);
+  border-radius: var(--radius);
+  background: var(--color-surface-muted);
 }
 
 .pokemonStatItem {
@@ -671,7 +699,8 @@ a {
   align-items: center;
   gap: var(--spacing-m);
   padding: 12px;
-  background: var(--color-stat-background);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-white);
   border-radius: var(--radius);
 }
 
@@ -682,12 +711,14 @@ a {
 .pokemonTabs {
   display: flex;
   gap: var(--spacing-s);
+  border-bottom: 1px solid var(--color-border-strong);
+  padding-bottom: var(--spacing-s);
 }
 
 .pokemonTab {
   flex: 1;
   padding: 10px 14px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius);
   background: var(--color-surface-muted);
   color: var(--color-text);
@@ -798,7 +829,9 @@ a {
 .loadMoreWrapper {
   display: flex;
   justify-content: center;
+  align-items: center;
   margin-top: var(--spacing-l);
+  min-height: 72px;
 }
 
 .loadMoreButton {
@@ -855,11 +888,18 @@ a {
 
   .searchBar {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .searchInput {
     width: 100%;
     min-width: unset;
+  }
+
+  .searchButton,
+  .searchResetButton.hidden {
+    width: 100%;
+    justify-content: center;
   }
 
   .pokemonList {
@@ -885,6 +925,7 @@ a {
 
   .pokemonDialogTitle {
     font-size: 24px;
+    min-height: 30px;
   }
 
   .pokemonStatus {
@@ -923,67 +964,4 @@ a {
   .pokemonDialogNavButton.navRight:active:not(.disabled) {
     transform: translate(35%, -50%) scale(0.96);
   }
-}
-
-/* =========================
-   Dialog Visual Enhancements
-   ========================= */
-
-/* Trennlinie Header */
-.pokemonDialogHeader {
-  border-bottom: 1px solid var(--color-border-strong);
-}
-
-/* Bild + Name Block */
-.pokemonDialogImageWrapper {
-  border: 1px solid var(--color-border-strong);
-  box-shadow: 0 2px 6px var(--color-shadow);
-}
-
-/* Allgemeine Infos */
-.pokemonDialogInfo {
-  border: 1px solid var(--color-border-strong);
-  padding: var(--spacing-m);
-  border-radius: var(--radius);
-  background: var(--color-surface-muted);
-}
-
-/* Fähigkeiten Container */
-.pokemonDialogTagList {
-  border: 1px solid var(--color-border-strong);
-  padding: var(--spacing-m);
-  border-radius: var(--radius);
-  background: var(--color-surface-muted);
-}
-
-/* Einzelne Fähigkeit */
-.pokemonDialogTag {
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-white);
-}
-
-/* Stats Container */
-.pokemonStatsList {
-  border: 1px solid var(--color-border-strong);
-  padding: var(--spacing-m);
-  border-radius: var(--radius);
-  background: var(--color-surface-muted);
-}
-
-/* Einzelne Stat-Zeile */
-.pokemonStatItem {
-  border: 1px solid var(--color-border-strong);
-  background: var(--color-white);
-}
-
-/* Tabs leicht abheben */
-.pokemonTabs {
-  border-bottom: 1px solid var(--color-border-strong);
-  padding-bottom: var(--spacing-s);
-}
-
-.pokemonDialogInfo,
-.pokemonDialogTagList,
-.pokemonStatsList {
-  box-shadow: 0 2px 6px var(--color-shadow);
 }
