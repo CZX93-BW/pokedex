@@ -433,13 +433,46 @@ function showPreviousPokemon() {
  */
 function saveToLocalStorage() {
   try {
-    localStorage.setItem('pokemonList', JSON.stringify(allPokemon));
+    const storageSafePokemonList = createStorageSafePokemonList(allPokemon);
+    localStorage.setItem('pokemonList', JSON.stringify(storageSafePokemonList));
     localStorage.setItem('pokemonOffset', String(currentOffset));
   } catch (error) {
-    localStorage.removeItem('pokemonList');
-    localStorage.setItem('pokemonOffset', String(currentOffset));
-    console.error('Failed to save pokemon list to local storage:', error);
+    handleLocalStorageSaveError(error);
   }
+}
+
+/**
+ * Creates a local-storage-safe pokemon list without cached detail objects.
+ *
+ * @param {Array} pokemonList - The current pokemon list.
+ * @returns {Array} The sanitized pokemon list.
+ */
+function createStorageSafePokemonList(pokemonList) {
+  return pokemonList.map((pokemon) => {
+    return {
+      id: pokemon.id,
+      name: pokemon.name,
+      sprites: pokemon.sprites,
+      types: pokemon.types,
+    };
+  });
+}
+
+/**
+ * Handles local storage save errors.
+ *
+ * @param {Error} error - The thrown storage error.
+ */
+function handleLocalStorageSaveError(error) {
+  localStorage.removeItem('pokemonList');
+
+  try {
+    localStorage.setItem('pokemonOffset', String(currentOffset));
+  } catch (offsetError) {
+    console.error('Failed to save pokemon offset to local storage:', offsetError);
+  }
+
+  console.error('Failed to save pokemon list to local storage:', error);
 }
 
 /**
