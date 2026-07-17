@@ -1,6 +1,6 @@
 # Pokédex – Webanwendung
 
-Dieses Projekt ist ein Nachbau eines Pokédex als Webanwendung im Rahmen einer Weiterbildung zum Fachinformatiker für Anwendungsentwicklung.
+Dieses Projekt ist ein Nachbau eines Pokédex als Webanwendung im Rahmen einer Weiterbildung zum Fullstack Developer.
 
 Die Anwendung nutzt eine externe API, um Pokémon-Daten dynamisch zu laden und darzustellen.  
 Der Fokus liegt auf einer sauberen technischen Umsetzung, klarer Struktur und einer benutzerfreundlichen Oberfläche.
